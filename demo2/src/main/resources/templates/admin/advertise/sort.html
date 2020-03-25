@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="UTF-8" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/admin/share/common::head(title='index')}"></head>
+<body>
+<div id="pageloader-overlay" class="visible incoming"><div class="loader-wrapper-outer"><div class="loader-wrapper-inner" ><div class="loader"></div></div></div></div>
+
+<!-- 0Start wrapper-->
+ <div id="wrapper">
+ 
+    <div th:replace="/admin/share/common::wrapper"></div>
+    <div th:replace="/admin/share/common::topbar"></div> 
+    <div class="clearfix"></div>
+    <div class="content-wrapper">
+         <div class="container-fluid">	
+               <!-- Breadcrumb-->
+               <div class="row pt-2 pb-2" th:replace="/admin/share/common::map(table='Advertise',page='Sort')"></div>
+   
+      <!-- startContent-->
+		     <div>
+				<form id="form" method="post">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">广告名称</th>
+								<th scope="col" >显示顺序</th>			
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="advert,advertStat:${advertises}">
+								<td th:text="${advertStat.index+1}"></td>
+								<td th:text="${advert.adname}"></td>
+								<td>
+								    <input type="hidden" th:value="${advert.id}" name="ids">
+								    <input type="text"  class="form-control" th:value="${advert.seq}" name="seqs" readonly="readonly" style="width:50px;">
+								</td>	
+							</tr>							
+						</tbody>
+						<tfoot>
+						       <tr>
+						           <th scope="col" colspan="3">
+						                 <button type="button" onclick="javascript:history.back(-1);" class="btn btn-danger"><i class="fa fa-times"></i> CANCEL</button>
+						                 <button id="btn_edit" type="button"  class="btn btn-success" th:method_address="@{/admin/advertise/sort}" >编辑顺序</button> 
+						           </th>
+						       </tr>      
+						</tfoot>
+
+					</table>
+				</form>
+				
+            </div>
+		    <!--End Row-->
+		    
+    </div><!--container-fluid-->  
+ </div><!--End content-wrapper-->
+
+<a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+
+<div th:replace="/admin/share/common::footer"></div>
+
+</div>
+<!-- 0end wrapper-->
+
+<div th:replace="/admin/share/common::js"></div>
+
+	<script type="text/javascript"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/jquery-1.8.3.js}"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/button_operate.js}"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/split.js}"></script>	
+    <script type="text/javascript">
+    $(function(){
+        $("#btn_edit").click(function(){
+         var value=$(this).text();
+         if(value=='编辑顺序'){
+          $("input[name='seqs']").removeAttr("readonly");
+          $(this).text("保存编辑结果");
+         }else{
+          var ids=$("[name='ids']");
+          var ids_array=new Array();
+          $(ids).each(function(index,item){
+           ids_array.push(item.value);
+          });
+          var seqs=$("[name='seqs']");
+          var seqs_array=new Array();
+          $(seqs).each(function(index,item){
+           seqs_array.push(item.value);
+          });
+          var action=$(this).attr("method_address");
+          $.ajax({
+           type:'post',
+           traditional:true,
+           url:action,
+           data:{'ids':ids_array,'seqs':seqs_array},
+           success:function(data){
+            alert("保存成功！");
+            if(data=="true"){
+             $("#btn_edit").text("编辑顺序");
+             $("input[name='seqs']").prop("readonly",true);
+            }
+           }
+          })
+         }
+        })
+       })
+    </script>
+</body>
+</html>
+
+

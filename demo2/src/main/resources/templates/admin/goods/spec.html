@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/admin/share/common::head(title='Modify Goods')}"></head>
+<body>
+
+<div id="pageloader-overlay" class="visible incoming"><div class="loader-wrapper-outer"><div class="loader-wrapper-inner" ><div class="loader"></div></div></div></div>
+
+<!-- 0Start wrapper-->
+ <div id="wrapper">
+    <div th:replace="/admin/share/common::wrapper"></div>
+    <div th:replace="/admin/share/common::topbar"></div> 
+    <div class="clearfix"></div>
+    <div class="content-wrapper">
+         <div class="container-fluid">	
+               <!-- Breadcrumb-->
+               <div class="row pt-2 pb-2" th:replace="/admin/share/common::map(table='Goods',page='ModifySpec')"></div>
+   
+                <!-- Content-->
+		       <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <form id="form"  th:action="@{/admin/goods_Spec}"  method="post">
+             
+                <h4 class="form-header text-uppercase">
+                  <i class="fa fa-user-circle-o"></i>
+                    Info
+                </h4>
+              <div  id="originalTable">
+                <div>
+                   <div class="form-group row">
+                       <label for="input-1" class="col-sm-2 col-form-label">商品名称</label>
+                            <div class="col-sm-6">
+                              <input type="hidden" class="form-control" id="goodsid"  th:value="${goods.id}">
+                              <input type="text" id="goodsname" class="form-control"  name="goodsname" th:value="${goods.goodsname}" readonly>
+                            </div>
+                    </div>
+                    <div class="form-group row">
+	                    <label for="input-1" class="col-sm-2 col-form-label">货号</label>
+	                        <div class="col-sm-6">
+	                             <input type="text" class="form-control" id="goodscode" th:value="${goods.goodscode}" readonly>
+	                        </div>
+	                </div>  
+
+                
+	                <div class="form-group row"  th:if="${goods_Specs!=null}" th:each="goods_Spec:${goods_Specs!=null?goods_Specs:null}">
+		                  <label for="input-1" class="col-sm-2 col-form-label">规格名称</label>
+		                   <select   style="height:36px;" class="specvs" name="specids" id="specvs" th:submit_url="@{/admin/good_Spec/ajaxGoods/}">
+		                     	<option value="0"  >--请选择规格--</option>
+								<option  th:each="spec:${specs}"  th:value="${spec.id}" th:selected="${goods_Specs!=null?goods_Spec.specid eq spec.id:null}">[[${spec.specname}]]</option>
+				           </select>
+				           <select   style="height:36px; " class="specv" id="specv" name="specvids" >
+								<option   th:if="${goods_Specs!=null}"  th:value="${goods_Specs!=null?goods_Spec.specvid:null}"  >[[${goods_Specs!=null?goods_Spec.specvname:null}]]</option>
+		                   </select>
+                  
+	                      <button type="button" id="delete" class="btn btn-primary waves-effect waves-light m-1"><i class="fa fa-times"></i> DELETE</button>
+		                  <h4 class="form-header text-uppercase"></h4>
+		            </div>
+		            <div class="form-group row"  id="addTable" >
+		                  <label for="input-1" class="col-sm-2 col-form-label">请选择新增规格名称</label>
+		                   <select   style="height:36px;" class="specvs" name="specids"  th:submit_url="@{/admin/good_Spec/ajaxGoods/}">
+		                     	<option value="0"  >--请选择規格--</option>
+								<option  th:each="spec:${specs}"  th:value="${spec.id}">[[${spec.specname}]]</option>
+				           </select>
+				           <select   style="height:36px; " class="specv" id="specv" name="specvids" >
+								<option value="0"></option>
+		                   </select>
+                  
+	                     <!--  <button type="button" id="delete" class="btn btn-primary waves-effect waves-light m-1"><i class="fa fa-times"></i> DELETE</button> -->
+		                  <h4 class="form-header text-uppercase"></h4>
+		            </div>
+		            
+		         
+	           </div> 
+             </div>
+       
+             <div>
+                    <button type="button" onclick="javascript:history.back(-1);" class="btn btn-danger"><i class="fa fa-times"></i> CANCEL</button>
+                    <button type="button" id="saveSpecs" th:submit_url="@{/admin/good_Spec}" class="btn btn-success">SAVE</button>
+                    <button type="button" id="add_spec" th:submit_url="@{/admin/good_Spec/ajaxAddApec}"class="btn btn-info waves-effect waves-light m-1"><i class="fa fa-check-square-o"></i> ADD</button>
+             </div>
+              
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--End Row-->
+		    
+    </div><!--container-fluid-->  
+ </div><!--End content-wrapper-->
+    
+
+<a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+
+<div th:replace="/admin/share/common::footer"></div>
+
+</div>
+<!-- 0end wrapper-->
+<div th:replace="/admin/share/common::js"></div>
+
+
+<script type="text/javascript"></script>
+<script type="text/javascript" th:src="@{/admin/assets/js/jquery-1.8.3.js}"></script>
+<script type="text/javascript" th:src="@{/admin/assets/js/button_operateGoods.js}"></script>
+
+</body>
+</html>
+

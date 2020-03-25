@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="shopping.dao.View_ClassDao">
+
+<!--   ******************所有分类 分页start*********************** -->
+    <!-- 一级sql -->
+	<sql id="first_where_sql">
+		<if test="condition!=null">
+			<if test="condition.first_classname!=null and condition.first_classname!=''">
+				and first_classname like '%' #{condition.first_classname} '%'
+			</if>
+		</if>
+		<if	test="(beginTime!=null and beginTime!='') and (endTime!=null and endTime!='')">
+			and first_addtime between #{beginTime} and #{endTime}
+		</if>
+		<if
+			test="(beginTime!=null and beginTime!='') and (endTime==null or endTime=='')">
+			and first_addtime between #{beginTime} and now()
+		</if>
+
+		<if
+			test="(beginTime==null or beginTime=='') and (endTime!=null and endTime!='')">
+			and first_addtime between '1970-01-01' and #{endTime}
+		</if>
+	</sql>
+    <!-- 一级分页条件查询 -->
+	<select id="firstSelectsByCondition" resultType="shopping.domain.View_Class">
+		select DISTINCT
+		first_id,first_addtime,first_classname,first_seq,first_display 
+		from view_class 
+		
+		<where>
+			<include refid="first_where_sql"/>
+			and first_level=1
+		</where>
+		    order by first_seq desc,first_addtime desc
+		<if test="skip!=0 or take !=0">
+		limit ${skip},${take}
+		</if>
+	</select>
+
+    <!--    一级总记录数 -->
+	<select id="firstSizeByCondition" resultType="integer">
+        select count(DISTINCT first_id)
+        from view_class 
+		<where>
+			<include refid="first_where_sql" />
+			and first_level=1
+		</where>
+	</select>
+
+
+ <!-- 二级sql -->
+<sql id="second_where_sql">
+		<if test="condition!=null">
+			<if test="condition.second_classname!=null and condition.second_classname!=''">
+				and second_classname like '%' #{condition.second_classname} '%'
+			</if>
+			<if test="condition.first_id!=0">
+				and first_id = #{condition.first_id}
+			</if>
+		   <if test="condition.second_id!=0">
+				and second_id = #{condition.second_id}
+		   </if>
+			
+		</if>
+		<if	test="(beginTime!=null and beginTime!='') and (endTime!=null and endTime!='')">
+			and second_addtime between #{beginTime} and #{endTime}
+		</if>
+		<if
+			test="(beginTime!=null and beginTime!='') and (endTime==null or endTime=='')">
+			and second_addtime between #{beginTime} and now()
+		</if>
+
+		<if
+			test="(beginTime==null or beginTime=='') and (endTime!=null and endTime!='')">
+			and second_addtime between '1970-01-01' and #{endTime}
+		</if>
+	</sql>
+    <!-- 二级分页条件查询 -->
+	<select id="secondSelectsByCondition" resultType="shopping.domain.View_Class">
+		select DISTINCT
+		first_id,first_classname,second_id,second_addtime,second_classname,second_seq,second_display 
+		from view_class  
+		
+		<where>
+			<include refid="second_where_sql"/>
+				and second_level=2
+		</where>
+		    order by second_seq desc,second_addtime desc
+		<if test="skip!=0 or take !=0">
+		limit ${skip},${take}
+		</if>
+	</select>
+
+    <!--    二级总记录数 -->
+	<select id="secondSizeByCondition" resultType="integer">
+        select count(DISTINCT second_id)
+        from view_class
+		<where>
+			<include refid="second_where_sql" />
+			and second_level=2
+		</where>
+	</select>
+	
+	 <!-- 三级sql -->
+	<sql id="thrid_where_sql">
+		<if test="condition!=null">
+			<if test="condition.thrid_classname!=null and condition.thrid_classname!=''">
+				and thrid_classname like '%' #{condition.thrid_classname} '%'
+			</if>
+			<if test="condition.first_id!=0">
+			  and first_id =#{condition.first_id}
+			</if>
+			<if test="condition.second_id!=0">
+			  and second_id =#{condition.second_id}
+			</if>
+			<if test="condition.thrid_id!=0">
+			  and thrid_id =#{condition.thrid_id}
+			</if>
+		</if>
+		<if	test="(beginTime!=null and beginTime!='') and (endTime!=null and endTime!='')">
+			and thrid_addtime between #{beginTime} and #{endTime}
+		</if>
+		<if
+			test="(beginTime!=null and beginTime!='') and (endTime==null or endTime=='')">
+			and thrid_addtime between #{beginTime} and now()
+		</if>
+
+		<if
+			test="(beginTime==null or beginTime=='') and (endTime!=null and endTime!='')">
+			and thrid_addtime between '1970-01-01' and #{endTime}
+		</if>
+	</sql>
+    <!-- 三级分页条件查询 -->
+	<select id="thridSelectsByCondition" resultType="shopping.domain.View_Class">
+		select DISTINCT
+		first_id,first_classname,second_id,second_classname,thrid_id,thrid_addtime,thrid_classname,thrid_seq,thrid_display 
+		from view_class
+		
+		<where>
+			<include refid="thrid_where_sql"/>
+			and thrid_level=3
+		</where>
+		    order by thrid_seq desc,thrid_addtime desc
+		<if test="skip!=0 or take !=0">
+		limit ${skip},${take}
+		</if>
+	</select>
+
+    <!--    三级总记录数 -->
+	<select id="thridSizeByCondition" resultType="integer">
+        select count(DISTINCT thrid_id)
+        from view_class
+		<where>
+		   <include refid="thrid_where_sql"/>
+			and thrid_level=3
+		</where>
+	</select>
+	
+<!--   ******************所有分类 分页end*********************** -->
+
+    <!-- 三级分类编辑按钮查详情 (把查到的值赋给下拉列表框)-->
+    <select id="selectThridById" resultType="shopping.domain.View_Class">
+           select * from view_class where thrid_id=#{thrid_id}
+    </select>
+<!--   ****************** 下拉列表框end*********************** -->	
+</mapper>

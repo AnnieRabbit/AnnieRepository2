@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="UTF-8" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/admin/share/common::head(title='index')}"></head>
+<body>
+<div id="pageloader-overlay" class="visible incoming"><div class="loader-wrapper-outer"><div class="loader-wrapper-inner" ><div class="loader"></div></div></div></div>
+
+<!-- 0Start wrapper-->
+ <div id="wrapper">
+ 
+    <div th:replace="/admin/share/common::wrapper"></div>
+    <div th:replace="/admin/share/common::topbar"></div> 
+    <div class="clearfix"></div>
+    <div class="content-wrapper">
+         <div class="container-fluid">	
+               <!-- Breadcrumb-->
+               <div class="row pt-2 pb-2" th:replace="/admin/share/common::map(table='Order',page='List')"></div>
+   
+      <!-- startContent-->
+		     <div style="overflow-x:scroll">
+				<form id="form" method="post">
+					<table class="table table-striped">
+
+						<thead>
+							<tr align="left">
+								<th scope="col" colspan="11">
+
+									<div  id="dateragne-picker">
+									<div style="float: left;margin-right:10px; margin-top:5px; "  >
+										<input class="form-control"  id="orderid" type="text" placeholder="请输入订单编号"
+											name="orderid" style="height: 35px; vertical-align: middle;">
+									</div>
+									<div style="float: left;margin-right:10px; margin-top:5px; "  >
+										<input class="form-control"  id="addname" type="text" placeholder="请输入买家昵称"
+											name="addname" th:value="${condition.addname}" style="height: 35px; vertical-align: middle;">
+									</div>	
+									<div style="float: left;margin-right:10px; margin-top:5px; "  >
+										<input class="form-control"  id="tel" type="text" placeholder="请输入买家电话"
+											name="tel" th:value="${condition.tel}"style="height: 35px; vertical-align: middle;">
+									</div>	
+								
+										<div class="input-daterange input-group" style="float: left;width:300px; margin-top:5px;">
+											<input type="text" class="form-control"  name="beginTime" th:value="${beginTime}" id="beginTime"
+												 placeholder="beginTime" />
+											<div class="input-group-prepend">
+												<span class="input-group-text">to</span>
+											</div>
+											<input type="text" class="form-control" name="endTime" th:value="${endTime}" id="endTime"
+												placeholder="endTime" />
+										</div>
+									</div>
+								  <div style="float: left;margin-right:10px; margin-top:5px;"  >
+											      <select class="form-control"  id="input-2" name="state" >
+                                                         <option value="0"  >-请选择状态-</option>
+					                                     <option  th:each="status:${statuses}" th:value="${status.state}" th:selected="${condition.state eq status.state}">[[${status.status}]]</option>
+                                                  </select> 
+									</div> 
+									<button type="button" th:onclick="search(this)" th:hr="@{/admin/orders/}" th:value="${state}" class="btn btn-info waves-effect waves-light m-1">&nbsp;搜&nbsp;&nbsp;索&nbsp;</button>
+								</th>
+							</tr>
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">订单ID</th>
+								<th scope="col" >下单时间</th>
+								<th scope="col">总金额</th>
+								<th scope="col">用户ID</th>
+								<th scope="col">用户昵称</th>
+								<th scope="col">电话</th>
+								<th scope="col">详细地址</th>
+								<th scope="col">地址</th>
+								<th scope="col">状态</th>
+								<th scope="col">Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="obj,stat:${s1_orders}">
+								<td th:text="${stat.index+1}"></td>
+								<td th:text="${obj.orderid}"></td>
+								<td th:text="${obj.addtime}"></td>
+								<td th:text="${obj.totalprice}"></td>
+							    <td th:text="${obj.userid}"></td>
+							    <td th:text="${obj.addname}"></td>
+						     	<td th:text="${obj.tel}"></td>
+						    	<td th:text="${obj.address}"></td>
+						    	<td th:text="${obj.cityname}"></td>
+						    	<td th:text="${obj.status}"></td>
+								<td>
+					           	<button type="button" th:onclick="get(this)" th:hr="@{/admin/order/}+${obj.orderid}"  class="btn btn-success">查看详情</button>
+							</tr>
+							<tr th:each="obj,stat:${s2_orders}">
+								<td th:text="${stat.index+1}"></td>
+								<td th:text="${obj.orderid}"></td>
+								<td th:text="${obj.addtime}"></td>
+								<td th:text="${obj.totalprice}"></td>
+							    <td th:text="${obj.userid}"></td>
+							    <td th:text="${obj.addname}"></td>
+						     	<td th:text="${obj.tel}"></td>
+						    	<td th:text="${obj.address}"></td>
+						    	<td th:text="${obj.cityname}"></td>
+						    	<td th:text="${obj.status}"></td>
+								<td>
+					           	<button type="button" th:onclick="get(this)" th:hr="@{/admin/order/}+${obj.orderid}"  class="btn btn-success">查看详情</button>
+							</tr>
+							<tr th:each="obj,stat:${s3_orders}">
+								<td th:text="${stat.index+1}"></td>
+								<td th:text="${obj.orderid}"></td>
+								<td th:text="${obj.addtime}"></td>
+								<td th:text="${obj.totalprice}"></td>
+							    <td th:text="${obj.userid}"></td>
+							    <td th:text="${obj.addname}"></td>
+						     	<td th:text="${obj.tel}"></td>
+						    	<td th:text="${obj.address}"></td>
+						    	<td th:text="${obj.cityname}"></td>
+						    	<td th:text="${obj.status}"></td>
+								<td>
+					           	<button type="button" th:onclick="get(this)" th:hr="@{/admin/order/}+${obj.orderid}"  class="btn btn-success">查看详情</button>
+							</tr>
+							<tr th:each="obj,stat:${s4_orders}">
+								<td th:text="${stat.index+1}"></td>
+								<td th:text="${obj.orderid}"></td>
+								<td th:text="${obj.addtime}"></td>
+								<td th:text="${obj.totalprice}"></td>
+							    <td th:text="${obj.userid}"></td>
+							    <td th:text="${obj.addname}"></td>
+						     	<td th:text="${obj.tel}"></td>
+						    	<td th:text="${obj.address}"></td>
+						    	<td th:text="${obj.cityname}"></td>
+						    	<td th:text="${obj.status}"></td>
+								<td>
+					           	<button type="button" th:onclick="get(this)" th:hr="@{/admin/order/}+${obj.orderid}"  class="btn btn-success">查看详情</button>
+							</tr>
+								<tr th:each="obj,stat:${s5_orders}">
+								<td th:text="${stat.index+1}"></td>
+								<td th:text="${obj.orderid}"></td>
+								<td th:text="${obj.addtime}"></td>
+								<td th:text="${obj.totalprice}"></td>
+							    <td th:text="${obj.userid}"></td>
+							    <td th:text="${obj.addname}"></td>
+						     	<td th:text="${obj.tel}"></td>
+						    	<td th:text="${obj.address}"></td>
+						    	<td th:text="${obj.cityname}"></td>
+						    	<td th:text="${obj.status}"></td>
+								<td>
+					           	<button type="button" th:onclick="get(this)" th:hr="@{/admin/order/}+${obj.orderid}"  class="btn btn-success">查看详情</button>
+							</tr>
+								<tr th:each="obj,stat:${s6_orders}">
+								<td th:text="${stat.index+1}"></td>
+								<td th:text="${obj.orderid}"></td>
+								<td th:text="${obj.addtime}"></td>
+								<td th:text="${obj.totalprice}"></td>
+							    <td th:text="${obj.userid}"></td>
+							    <td th:text="${obj.addname}"></td>
+						     	<td th:text="${obj.tel}"></td>
+						    	<td th:text="${obj.address}"></td>
+						    	<td th:text="${obj.cityname}"></td>
+						    	<td th:text="${obj.status}"></td>
+								<td>
+					           	<button type="button" th:onclick="get(this)" th:hr="@{/admin/order/}+${obj.orderid}"  class="btn btn-success">查看详情</button>
+							</tr>
+								<tr th:each="obj,stat:${s7_orders}">
+								<td th:text="${stat.index+1}"></td>
+								<td th:text="${obj.orderid}"></td>
+								<td th:text="${obj.addtime}"></td>
+								<td th:text="${obj.totalprice}"></td>
+							    <td th:text="${obj.userid}"></td>
+							    <td th:text="${obj.addname}"></td>
+						     	<td th:text="${obj.tel}"></td>
+						    	<td th:text="${obj.address}"></td>
+						    	<td th:text="${obj.cityname}"></td>
+						    	<td th:text="${obj.status}"></td>
+								<td>
+					           	<button type="button" th:onclick="get(this)" th:hr="@{/admin/order/}+${obj.orderid}"  class="btn btn-success">查看详情</button>
+							</tr>
+								<tr th:each="obj,stat:${s8_orders}">
+								<td th:text="${stat.index+1}"></td>
+								<td th:text="${obj.orderid}"></td>
+								<td th:text="${obj.addtime}"></td>
+								<td th:text="${obj.totalprice}"></td>
+							    <td th:text="${obj.userid}"></td>
+							    <td th:text="${obj.addname}"></td>
+						     	<td th:text="${obj.tel}"></td>
+						    	<td th:text="${obj.address}"></td>
+						    	<td th:text="${obj.cityname}"></td>
+						    	<td th:text="${obj.status}"></td>
+								<td>
+					           	<button type="button" th:onclick="get(this)" th:hr="@{/admin/order/}+${obj.orderid}"  class="btn btn-success">查看详情</button>
+							</tr>
+							<tr>
+								<th scope="row" colspan="11"><span>[[${pager.size}
+										]] Records</span> &nbsp;&nbsp;&nbsp;&nbsp; <span class="current">
+										The [[${pager.page }]] Page</span> &nbsp;&nbsp;&nbsp;&nbsp; <span
+									class="current">[[${pager.pages }]] Pages</span>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<button type="button" id="submit_first"
+										th:submit_url="@{/admin/orders/}+${pager.first}"
+										class="btn btn-outline-danger btn-round waves-effect waves-light m-1">First</button>
+									<button type="button" id="submit_pre"
+										th:submit_url="@{/admin/orders/}+${pager.pre}"
+										class="btn btn-outline-success btn-round waves-effect waves-light m-1">Previous</button>
+									<button type="button" id="submit_next"
+										th:submit_url="@{/admin/orders/}+${pager.next}"
+										class="btn btn-outline-info btn-round waves-effect waves-light m-1">Next</button>
+									<button type="button" id="submit_last"
+										th:submit_url="@{/admin/orders/}+${pager.last}"
+										class="btn btn-outline-warning btn-round waves-effect waves-light m-1">Last page</button>
+										</th>
+							</tr>
+						</tbody>
+
+					</table>
+				</form>
+				<form  method="post">
+					<input type="hidden" name="_method" value="put">
+				</form>
+            </div>
+		    <!--End Row-->
+		    
+    </div><!--container-fluid-->  
+ </div><!--End content-wrapper-->
+
+<a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+
+<div th:replace="/admin/share/common::footer"></div>
+
+</div>
+<!-- 0end wrapper-->
+
+<div th:replace="/admin/share/common::js"></div>
+
+	<script type="text/javascript"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/jquery-1.8.3.js}"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/button_operate.js}"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/split.js}"></script>	
+	
+	
+
+	<script type="text/javascript">
+	
+	function get(element){
+		var action=$(element).attr("hr");	
+		location.href=action;
+	}
+
+	 /*	function search(element){
+		var state=$(element).val();
+		 var action=$(element).attr("hr")+'1';
+		$("form").prop("action",action).submit();	 
+	}  */
+	
+  	function search(element){
+		var state=$(element).val();
+		 var action=$(element).attr("hr")+state+'/1';
+		$("form").prop("action",action).submit();	 
+	}   
+	</script>
+
+</body>
+</html>
+
+

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="shopping.dao.SpecDao">
+
+   <!-- 修改 -->
+    <update id="update">
+        update tb_spec set
+        addtime=now(),specname=#{specname}, seq=#{seq}
+        where id=#{id}
+    </update>
+
+    <!--删除 -->
+    <delete id="delete">
+        delete from tb_spec where id=#{id}
+    </delete>
+    
+    <!--编辑查详情 -->
+    <select id="selectById" resultMap="Spec">
+     select * from tb_spec where id=#{id}
+    </select>
+
+    <!--添加 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_spec (addtime,specname,seq)    
+		values	(now(),#{specname},#{seq}) 
+    </insert>
+    
+    <resultMap type="shopping.domain.Spec" id="Spec">
+          <id column="id" property="id"/>
+          <result column="addtime" property="addtime"/>
+          <result column="specname" property="specname"/>
+          <result column="seq" property="seq"/>
+          <collection property="specvs" column="id" fetchType="lazy" select="shopping.dao.SpecvDao.selectById">
+               <id column="id" property="id"/>
+               <result column="addtime" property="addtime"/>
+               <result column="specid" property="specid"/>
+               <result column="specvname" property="specvname"/>
+               <result column="seq" property="seq"/>
+          </collection>
+    </resultMap>
+
+	<sql id="where_sql">
+		<if test="condition!=null">
+			<if test="condition.specname!=null and condition.specname!=''">
+				and specname like '%' #{condition.specname} '%'
+			</if>
+		</if>
+		<if	test="(beginTime!=null and beginTime!='') and (endTime!=null and endTime!='')">
+			and addtime between #{beginTime} and #{endTime}
+		</if>
+		<if
+			test="(beginTime!=null and beginTime!='') and (endTime==null or endTime=='')">
+			and addtime between #{beginTime} and now()
+		</if>
+
+		<if
+			test="(beginTime==null or beginTime=='') and (endTime!=null and endTime!='')">
+			and addtime between '1970-01-01' and #{endTime}
+		</if>
+	</sql>
+   <!--    分页 -->
+	<select id="selectsByCondition" resultMap="Spec">
+	    select * from tb_spec	
+		<where>
+			<include refid="where_sql"/>
+		</where>
+		    order by seq asc,addtime desc
+		<if test="skip!=0 or take !=0">
+		limit ${skip},${take}
+		</if>
+	</select>
+
+    <!--总记录数 -->
+	<select id="sizeByCondition" resultType="integer">
+        select count(1) from tb_spec	 
+		<where>
+			<include refid="where_sql" />
+		</where>
+	</select>
+	
+	 <!-- 最大seq -->
+	<select id="selectMaxSeq" resultType="integer">
+	   select max(seq) from tb_spec	
+	</select>
+	
+		
+	<!-- 查询good表中是否有specid -->
+    <select id="isUsedInGoodsBySpecid" resultType="integer">
+	       select count(1) from tb_goods_spec where specid=#{id}
+	</select> 
+	
+
+
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="shopping.dao.OrderDetailDao">
+		 
+	 <resultMap type="shopping.domain.OrderDetail" id="OrderDetail">
+		<id column="id" property="id"/>
+		<association property="goods" column="goodsid" fetchType="lazy"
+			select="shopping.dao.GoodsDao.selectById">
+		</association>
+		<collection property="view_GoodsSpecs" column="goodsid" fetchType="lazy"
+			select="shopping.dao.View_GoodsSpecDao.selectByCondition">
+		</collection>
+     </resultMap>
+     
+     <!-- 查询一个orderid下所有子订单详情 -->
+     <select id="selectsByOrdercode" resultMap="OrderDetail">
+		select * from tb_orderdetail where ordercode=#{ordercode}
+	 </select>
+	 
+</mapper>

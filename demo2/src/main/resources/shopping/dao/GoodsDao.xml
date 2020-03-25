@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="shopping.dao.GoodsDao">
+	<!-- 上架下架-->
+	<update id="ChangeState">
+	      update tb_goods set state=#{state} where id=#{id}
+	</update>
+
+<!-- 查详情 -->
+	<select id="selectById" resultType="shopping.domain.Goods">
+	     select * from tb_goods  where id=#{id}
+	</select>
+	
+	
+    <!-- 添加-->
+    <insert id="insert">
+	     insert into tb_goods(
+	     addtime,goodsname,brandid,classid,
+	     costprice,sellprice,originprice,
+	     inventory,salesnum,
+	     weight,volume,
+	     path,state,clickrate,goodscode,details,recommend
+)
+values (
+	     now(),#{goodsname},#{brandid},#{classid},
+	     #{costprice},#{sellprice},#{originprice},
+	     #{inventory},0,
+	     #{weight},#{volume},
+	     #{path},2,0,#{goodscode},#{details},1
+)
+	     
+	 </insert>
+	
+	
+	  <!-- 编辑基本信息-->
+	 <update id="update">
+       update tb_goods 
+		     <set>
+					addtime=now(),
+					<if test="goodsname!=null and goodsname!=''">
+					goodsname=#{goodsname},
+					</if>
+					<if test="brandid!=0">
+					brandid=#{brandid},
+					</if>
+					<if test="classid!=0">
+					classid=#{classid},
+					</if>
+					<if test="costprice!=0">
+					costprice=#{costprice},
+					</if>
+					<if test="sellprice!=0">
+					sellprice=#{sellprice},
+					</if>
+					<if test="originprice!=0">
+					originprice=#{originprice},
+					</if>
+					<if test="inventory!=0">
+					inventory=#{inventory},
+					</if>
+					<if test="weight!=0">
+					weight=#{weight},
+					</if>
+					<if test="volume!=0">
+					volume=#{volume},
+					</if>
+				    <if test="path!=null and path!=''">
+					path=#{path},
+					</if> 
+					<if test="state!=0">
+					state=#{state},
+					</if>
+					<if test="clickrate!=0">
+					clickrate=#{clickrate},
+					</if>
+					<if test="salesnum!=0">
+					salesnum=#{salesnum},
+					</if>	
+					<if test="goodscode!=null and goodscode!=''">
+					goodscode=#{goodscode},
+					</if>
+					<if test="details!=null and details!=''">
+					details=#{details}
+					</if>
+		   </set>
+		where id=#{id}
+    </update>
+	 
+	
+    <!-- 在order订单中是否有此商品 -->
+	<select id="isExistsInOrderDetail" resultType="integer">
+		select count(1) from tb_orderdetail where goodsid=#{id}
+	</select> 
+	
+	 <!--  查询当前上下架状态-->
+	<select id="selectState" resultType="integer">
+		select state from tb_goods where id=#{id}
+	</select> 
+	
+   <!-- 删除 -->
+	<delete id="delete">
+		delete from tb_goods where id=#{id}
+	</delete> 
+
+</mapper>

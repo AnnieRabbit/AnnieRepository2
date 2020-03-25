@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="shopping.dao.View_GoodsDao">
+	<sql id="where_sql">
+		<if test="condition!=null">
+			<if test="condition.goodsname!=null and condition.goodsname!=''">
+				and goodsname like '%' #{condition.goodsname} '%'
+			</if>
+			<if test="condition.goodscode!=null and condition.goodscode!=''">
+				and goodscode like '%' #{condition.goodscode} '%'
+			</if>
+			<if test="condition.brandid!=0">
+				and brandid=#{condition.brandid}
+			</if>
+		    <if test="condition.thrid_id!=0">
+				and thrid_id=#{condition.thrid_id}
+			</if>
+			<if test="condition.second_id!=0">
+				and second_id=#{condition.second_id}
+			</if>
+			<if test="condition.first_id!=0">
+				and first_id=#{condition.first_id}
+			</if> 
+			<if test="condition.state!=0">
+				and state=#{condition.state}
+			</if>
+		</if>
+		<if	test="(beginTime!=null and beginTime!='') and (endTime!=null and endTime!='')">
+			and addtime between #{beginTime} and #{endTime}
+		</if>
+		<if
+			test="(beginTime!=null and beginTime!='') and (endTime==null or endTime=='')">
+			and addtime between #{beginTime} and now()
+		</if>
+
+		<if
+			test="(beginTime==null or beginTime=='') and (endTime!=null and endTime!='')">
+			and addtime between '1970-01-01' and #{endTime}
+		</if>
+	</sql>
+    <!-- 分页条件查询 -->
+	<select id="selectByCondition" resultType="shopping.domain.View_Goods">
+		select * from view_goods
+		<where>
+			<include refid="where_sql"/>
+		</where>
+		order by addtime desc
+		<if test="skip!=0 or take !=0">
+		limit ${skip},${take}
+		</if>
+	</select>
+	
+	<select id="selectById" resultType="shopping.domain.View_Goods">
+	    select * from view_goods where id=#{id}
+	</select>
+
+    <resultMap type="shopping.domain.View_Goods" id="Images">
+          <id column="id" property="id"/>
+          <collection property="images" column="id" fetchType="lazy" select="shopping.dao.ImagesDao.selectById">
+               <id column="id" property="id"/>
+               <result column="addtime" property="addtime"/>
+               <result column="imgpath" property="imgpath"/>
+               <result column="goodsid" property="goodsid"/>
+          </collection>
+    </resultMap>
+
+
+
+
+    <!--    总记录数 -->
+	<select id="sizeGoodsByCondition" resultType="integer">
+		select count(1) from view_goods
+		<where>
+			<include refid="where_sql" />
+		</where>
+	</select>
+	 
+	 <select id="orderdetail">
+	      select count(1) from tb_orderdetail where goodsid=#{goodsid}
+	 </select>
+	
+</mapper>

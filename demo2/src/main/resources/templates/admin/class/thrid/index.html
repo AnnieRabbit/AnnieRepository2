@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="UTF-8" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/admin/share/common::head(title='三级分类')}"></head>
+<body>
+<div id="pageloader-overlay" class="visible incoming"><div class="loader-wrapper-outer"><div class="loader-wrapper-inner" ><div class="loader"></div></div></div></div>
+
+<!-- 0Start wrapper-->
+ <div id="wrapper">
+ 
+    <div th:replace="/admin/share/common::wrapper"></div>
+    <div th:replace="/admin/share/common::topbar"></div> 
+    <div class="clearfix"></div>
+    <div class="content-wrapper">
+         <div class="container-fluid">	
+               <!-- Breadcrumb-->
+               <div class="row pt-2 pb-2" th:replace="/admin/share/common::map(table='Class',page='ThridList')"></div>
+   
+      <!-- startContent-->
+		    <div>
+			<form id="form" method="post">
+				<table  id="search_table">
+					<tr align="left">
+						<th scope="col" colspan="6">
+							<div  id="dateragne-picker">
+							
+								<div style="float: left;margin-right:10px; margin-top:5px; "  >
+									<input   id="thrid_classname"  th:value="${condition.thrid_classname}" type="text" placeholder="请输入三级分类名称"
+											name="thrid_classname"  class="form-control"  style="height: 35px; vertical-align: middle;width:150px;">
+								</div>	
+								<div class="input-daterange input-group" style="float: left;width:300px; margin-top:5px;">
+										<input type="text" class="form-control"  name="beginTime" th:value="${beginTime}" id="beginTime"
+												 placeholder="beginTime" />
+										<div class="input-group-prepend">
+												<span class="input-group-text">to</span>
+										</div>
+										<input type="text" class="form-control" name="endTime" th:value="${endTime}" id="endTime"
+												placeholder="endTime" />
+								</div>
+							    <div style="float: left;height:40px; margin-right:10px; margin-top:5px" >
+								    <select  id="firstClassId" name="first_id" style="height:36px;" class="form-control" th:submit_url="@{/admin/classes/second/ajaxSecondIndex/}">
+										   <option value="0"  >-请选择一级分类-</option>
+										   <option th:each="class,stat:${firstClasses}"  th:selected="${condition.first_id eq class.first_id}" th:value="${class.first_id}">[[${class.first_classname}]]</option>
+								    </select>							 
+								</div>
+								<div style="float: left;height:40px; margin-right:10px; margin-top:5px" >
+									  <select id="secondClassId" name="second_id" style="height:36px; float:left;" class="form-control" th:submit_url="@{/admin/classes/thrid/ajaxThridIndex/}">
+										  <option value="0"  >-请选择二级分类-</option>
+				                          <option th:each="sec:${secondClasses}"  th:selected="${condition.second_id eq sec.second_id}" th:value="${sec.second_id}">[[${sec.second_classname}]]</option>
+									  </select>  
+								</div>
+								<div style="float: left;height:40px; margin-right:10px; margin-top:5px" >
+									  <select  id="thridClassId" name="thrid_id" style="height:36px;" class="form-control" >
+										   <option value="0"  >-请选择三级分类-</option>
+										   <option  th:each="thr:${thridClasses}"   th:selected="${condition.thrid_id eq thr.thrid_id}" th:value="${thr.thrid_id}">[[${thr.thrid_classname}]]</option>
+									  </select>							 
+							    </div>
+							      <button type="submit" class="btn btn-info waves-effect waves-light m-1">&nbsp;搜&nbsp;&nbsp;索&nbsp;</button>
+								  <button type="button" id="append" class="btn btn-warning waves-effect waves-light m-1" style="border:none;"  >&nbsp;添&nbsp;&nbsp;加&nbsp;</button>
+						</div>
+					</th>
+					</tr>
+					</table>
+					<table  id="append_table" style="display:none;">
+							<tr align="left">
+						       <th scope="col" colspan="6">
+
+							      <div  id="dateragne-picker">
+									 <div style="float: left;margin-right:10px; margin-top:5px; "  >
+									   <input type="hidden" id="id" name="id">
+										<input  name="classname" id="classname" th:value="${condition.second_classname}" type="text" placeholder="请输入三级分类名称"
+											style="height: 35px; vertical-align: middle;">	
+											<input type="text" id="seq"  name="seq" placeholder="请输入显示顺序"  style="height: 35px; vertical-align: middle;">
+									  </div>	
+                                     <div style="float: left;height:40px; margin-right:10px; margin-top:5px" >
+										<select  id="fid"  style="height:36px;" class="form-control" th:submit_url="@{/admin/classes/second/ajaxSecondIndex/}">
+										      <option value="0"  >--请选择一级分类--</option>
+										      <option th:each="class,stat:${firstClasses}" th:value="${class.first_id}">[[${class.first_classname}]]</option>
+										</select>							 
+									 </div>
+								
+								    <div style="float: left;height:40px; margin-right:10px; margin-top:5px" >
+										   <select  id="pid" name="pid" style="height:36px;" class="form-control" >
+										      <option value="0">--请选择二级分类--</option>
+										   </select>
+									</div> 
+								 
+									
+									<button  type="button" id="save_append"  th:short_url="@{/admin/class}"  th:submit_url="@{/admin/class/thrid}" class="btn btn-info waves-effect waves-light m-1">保存新增</button>
+									<button  type="button" id="save_modify"  th:short_url="@{/admin/class}"  th:submit_url="@{/admin/class/thrid}" class="btn btn-info waves-effect waves-light m-1" style="display:none;">保存编辑</button>
+									<button  type="button" id="cancel"  class="btn btn-info waves-effect waves-light m-1">返回</button>
+							</div>
+									
+								</th>
+							</tr>
+							</table>
+							<table class="table table-striped">
+							   <thead>
+						            <tr align="left">
+								        <th scope="col">#</th>
+								        <th scope="col">一级分类名称</th>
+								        <th scope="col">二级分类名称</th>
+								        <th scope="col">三级分类名称</th>
+								        <th scope="col" >添加时间</th>
+								         <th scope="col" >排序</th>
+								        <th scope="col">操作</th>
+							        </tr>
+					           </thead>
+						       <tbody id="tbody">
+							     <tr th:each="obj,stat:${pager.datas}">
+								   <td th:text="${stat.index+1}"></td>
+								   <td th:text="${obj.first_classname}"></td>
+								   <td th:text="${obj.second_classname}"></td>
+								   <td th:text="${obj.thrid_classname}"></td>
+								   <td th:text="${obj.thrid_addtime}"></td>
+								   <td th:text="${obj.thrid_seq}"></td>
+								   
+								   <td>
+								      <button type="button"  th:onclick="modify(this)" th:short_url="@{/admin/class}"  th:submit_url="@{/admin/class/thrid/}+${obj.thrid_id}"  class="btn btn-success">编辑</button>
+								      <button type="button" th:onclick="r(this)" th:short_url="@{/admin/class}"  th:submit_url="@{/admin/class/thrid/}+${obj.thrid_id}" class="btn btn-success">删除</button>  
+			 
+								   </td>
+							      </tr>
+							   	</tbody>
+							   	<tfoot id="tfoot">   
+							       <tr>
+								      <th scope="row" colspan="6">
+								         <span>[[${pager.size}]] Records</span> &nbsp;&nbsp;&nbsp;&nbsp; 
+								         <span class="current">The [[${pager.page }]] Page</span> &nbsp;&nbsp;&nbsp;&nbsp; 
+								         <span class="current">[[${pager.pages }]] Pages</span>
+									
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<button type="button" onclick="split_submit(this)"
+										th:submit_url="@{/admin/classes/thrid/}+${pager.first}"
+										class="btn btn-outline-danger btn-round waves-effect waves-light m-1">First</button>
+									<button type="button" onclick="split_submit(this)"
+										th:submit_url="@{/admin/classes/thrid/}+${pager.pre}"
+										class="btn btn-outline-success btn-round waves-effect waves-light m-1">Previous</button>
+									<button type="button" onclick="split_submit(this)"
+										th:submit_url="@{/admin/classes/thrid/}+${pager.next}"
+										class="btn btn-outline-info btn-round waves-effect waves-light m-1">Next</button>
+									<button type="button" onclick="split_submit(this)"
+										th:submit_url="@{/admin/classes/thrid/}+${pager.last}"
+										class="btn btn-outline-warning btn-round waves-effect waves-light m-1">Last page</button>
+										</th>
+							</tr>	
+					</tfoot>
+
+					</table>
+				</form>
+			
+            </div>
+		    <!--End Row-->
+		    
+    </div><!--container-fluid-->  
+ </div><!--End content-wrapper-->
+
+<a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+
+<div th:replace="/admin/share/common::footer"></div>
+
+</div>
+<!-- 0end wrapper-->
+
+<div th:replace="/admin/share/common::js"></div>
+
+	<script type="text/javascript"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/jquery-1.8.3.js}"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/button_operate.js}"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/button_operateThrClass.js}"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/split.js}"></script>	
+	
+
+</body>
+</html>
+
+

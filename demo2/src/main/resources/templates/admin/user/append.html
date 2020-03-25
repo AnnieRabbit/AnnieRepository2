@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/admin/share/common::head(title='Append Admin')}"></head>
+<body>
+
+<div id="pageloader-overlay" class="visible incoming"><div class="loader-wrapper-outer"><div class="loader-wrapper-inner" ><div class="loader"></div></div></div></div>
+
+<!-- 0Start wrapper-->
+ <div id="wrapper">
+    <div th:replace="/admin/share/common::wrapper"></div>
+    <div th:replace="/admin/share/common::topbar"></div> 
+    <div class="clearfix"></div>
+    <div class="content-wrapper">
+         <div class="container-fluid">	
+               <!-- Breadcrumb-->
+               <div class="row pt-2 pb-2" th:replace="/admin/share/common::map(table='User',page='Register')"></div>
+   
+                <!-- Content-->
+		       <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <form id="personal-info" enctype="multipart/form-data" th:action="@{/admin/user}" method="post">
+                <h4 class="form-header text-uppercase">
+                  <i class="fa fa-user-circle-o"></i>
+                   Personal Info
+                </h4>
+                <div class="form-group row">
+                  <label for="input-1" class="col-sm-2 col-form-label">用户名</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="input-1" name="user.username" required>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="input-2" class="col-sm-2 col-form-label">密码</label>
+                  <div class="col-sm-10">
+                    <input type="password" class="form-control" id="input-2" name="user.password" required>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="input-2" class="col-sm-2 col-form-label">确认密码</label>
+                  <div class="col-sm-10">
+                    <input type="password" class="form-control" id="input-2" name="repassword" required>
+                  </div>
+                </div>
+               <div class="form-group row">
+                  <label for="input-1" class="col-sm-2 col-form-label">真实姓名</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="input-1" name="user.realname" required>
+                  </div>
+                </div>
+               <div class="form-group row">
+                 <label for="input-1" class="col-sm-2 col-form-label">性别</label>&nbsp;&nbsp;&nbsp;
+                      <div class="icheck-material-success">
+                          <input type="radio" id="success1" value="男" name="user.sex" checked/>
+                          <label for="success1">男</label>
+                      </div>&nbsp;&nbsp;&nbsp;
+                      <div class="icheck-material-danger">
+                         <input type="radio" id="danger1"  value="女" name="user.sex" />
+                         <label for="danger1">女</label>
+                      </div>
+                </div>
+                 <div class="form-group row">
+                   
+                </div>
+                <div class="form-group row">
+                  <label for="input-3" class="col-sm-2 col-form-label">E-mail</label>
+                  <div class="col-sm-10">
+                    <input type="email" class="form-control" id="input-3" name="user.email" required>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="input-4" class="col-sm-2 col-form-label">联系电话</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="input-4" name="user.tel" required>
+                  </div>
+                </div>
+                <h4 class="form-header">
+                <i class="fa fa-file-text-o"></i>
+                  REQUIREMENTS
+                </h4>
+              
+               
+               
+                <div class="form-group row">
+                  <label for="input-8" class="col-sm-2 col-form-label">请选择头像</label>
+                  <div class="col-sm-10">
+                    <input type="file" class="form-control" id="input-8" name="file" required>
+                  </div>
+                </div>
+                
+                 <div class="form-group row">
+                  <label for="input-8" class="col-sm-2 col-form-label">[[${msg}]]</label>
+                </div>
+                
+                <div class="form-footer">
+                    <button type="button" onclick="javascript:history.back(-1);" class="btn btn-danger"><i class="fa fa-times"></i> CANCEL</button>
+                    <button type="submit" class="btn btn-success"><i class="fa fa-check-square-o"></i> SAVE</button>
+                    <!--  <p class="text-dark mb-0">Already have an account? <a href="authentication-signin.html"> Sign In here</a></p> -->
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--End Row-->
+
+		
+		    
+    </div><!--container-fluid-->  
+ </div><!--End content-wrapper-->
+    
+
+<a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+
+<div th:replace="/admin/share/common::footer"></div>
+
+</div>
+<!-- 0end wrapper-->
+<div th:replace="/admin/share/common::js"></div>
+
+
+<script type="text/javascript"></script>
+<script type="text/javascript" th:src="@{/admin/assets/js/jquery-1.8.3.js}"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="shopping.dao.SpecvDao">
+
+    <!-- 分步查询 -->
+	<select id="selectById" resultType="shopping.domain.Specv">
+	    select * from tb_specv where specid=#{id}
+	</select>
+	
+	<select id="selectAllSpecvs" resultType="shopping.domain.Specv">
+	     select id,specvname,specid from tb_specv 
+	</select>
+
+    <!-- 批量添加 -->
+    <insert id="insert">
+        insert into tb_specv(addtime,specvname,specid,seq)
+        values
+        <foreach collection="specvs" item="specv" separator=",">
+            (now(),#{specv.specvname},#{specv.specid},#{specv.seq})
+        </foreach>
+    </insert>
+    
+    <!-- 最大记录数 -->
+	<select id="selectMaxSeq" resultType="integer">
+	   select max(seq) from tb_specv
+	</select>
+	
+	<!-- 删除所有规格详情 -->
+    <delete id="deleteAllSpecvs">
+           delete from tb_specv where specid=#{id}
+    </delete>
+    
+    <!-- 删除单个规格详情 -->
+    <delete id="deleteOneSpecv">
+           delete from tb_specv where id=#{id}
+    </delete>
+    
+    <!-- 查询good表中是否有specvid -->
+    <select id="isUsedInGoods" resultType="integer">
+	       select count(1) from tb_goods_spec where id=#{id}
+	</select> 
+	
+	
+	<!-- 批量更新 -->
+    <update id="updateSpecvs">
+         <foreach collection="specvs" item="specv" separator=";">
+           update tb_specv SET
+		 		  specvname=#{specv.specvname},
+			      seq=#{specv.seq},
+			      addtime=now()
+		     	WHERE  id=#{specv.id}
+          </foreach>
+    </update>
+	
+</mapper>

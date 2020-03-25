@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="UTF-8" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/admin/share/common::head(title='index')}"></head>
+<body>
+<div id="pageloader-overlay" class="visible incoming"><div class="loader-wrapper-outer"><div class="loader-wrapper-inner" ><div class="loader"></div></div></div></div>
+
+<!-- 0Start wrapper-->
+ <div id="wrapper">
+    <div th:replace="/admin/share/common::wrapper(username='Admin')"></div>
+    <div th:replace="/admin/share/common::topbar"></div> 
+    <div class="clearfix"></div>
+    <div class="content-wrapper">
+         <div class="container-fluid">	
+               <!-- Breadcrumb-->
+               <div class="row pt-2 pb-2" th:replace="/admin/share/common::map(table='User',page='List')"></div>
+      <!-- startContent-->
+		     <div>
+				<form id="form" method="post">
+					<table class="table table-striped">
+
+						<thead>
+							<tr align="left">
+								<th scope="col" colspan="9">
+
+									<div   id="dateragne-picker">
+									<div  style="float: left;margin-right:10px; margin-top:5px; "  >
+										<input class="form-control" id="username" type="text" th:value="${condition.username}" placeholder="请输入用户名"
+											name="username" style="height: 35px; vertical-align: middle;">
+									</div>	
+									<div style="float: left;height:40px; margin-right:10px; margin-top:5px" >
+										<select style="height:36px;" class="form-control"  name="state">
+										      <option value="0" >--请选择状态--</option>
+										      <option value="1" th:selected="${condition.state==1}">----启用----</option>
+										      <option value="2" th:selected="${condition.state==2}">----禁用----</option>
+										</select>
+									</div>
+									<div class="input-daterange input-group" style="float: left;width:300px; margin-top:5px;">
+											<input type="text" class="form-control"  name="beginTime" th:value="${beginTime}" id="beginTime"
+												 placeholder="beginTime" />
+											<div class="input-group-prepend">
+												<span class="input-group-text">to</span>
+											</div>
+											<input type="text" class="form-control" name="endTime" th:value="${endTime}" id="endTime"
+												placeholder="endTime" />
+										</div>
+									</div>
+									<button type="submit"
+										class="btn btn-info waves-effect waves-light m-1">&nbsp;搜&nbsp;&nbsp;索&nbsp;</button>
+								<button type="button" class="btn btn-warning waves-effect waves-light m-1" id="append" style="border:none;"
+									onclick="get(this)"	 th:hr="@{/admin/user/}" >&nbsp;添&nbsp;&nbsp;加&nbsp;</button>
+								</th>
+							</tr>
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">用户名</th>
+								<th scope="col" >注册时间</th>
+								<th scope="col">真实姓名</th>
+								<th scope="col">会员等级</th>
+								<th scope="col">状态</th>
+								<th scope="col">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="user,stat:${pager.datas}">
+								<td th:text="${stat.index+1}"></td>
+								<td th:text="${user.username}"></td>
+								<td th:text="${user.addtime}"></td>
+								<td th:text="${user.realname}"></td>
+								<td th:text="${user.roles==1?'系统管理员':'普通用户'}"></td>
+								<td th:text="${user.state==1?'启用':'禁用'}"></td>
+								<td>
+								<button type="button"  onclick="get(this)" th:hr="@{/admin/user/d/}+${user.id}" th:if="${session.user.username=='admin' or user.roles==2}"class="btn btn-success">详情</button> 
+								<button type="button"  onclick="get(this)" th:hr="@{/admin/user/}+${user.id}" th:if="${session.user.username=='admin' and user.roles==1}" class="btn btn-success">编辑</button>
+								<button type="button"  onclick="get(this)" th:hr="@{/admin/users/enable/}+${user.id}" th:if="${user.roles==2 and user.state==2 or session.user.username=='admin' and user.state==2 }" id="enable" class="btn btn-success waves-effect waves-light m-1">启用</button>
+								<button type="button"  onclick="get(this)" th:hr="@{/admin/users/disable/}+${user.id}" th:if="${user.roles==2 and user.state==1  or session.user.username=='admin' and user.state==1}" id="enable"  class="btn btn-danger waves-effect waves-light m-1">禁用</button>
+								<button type="button"  onclick="get(this)" th:hr="@{/admin/user/remove/}+${user.id}" th:if="${session.user.username=='admin' and user.roles==1}" class="btn btn-primary waves-effect waves-light m-1">删除</button> 
+								<button type="button"  onclick="resetpass(this)" th:hr="@{/admin/user/resetpass/}+${user.id}" th:if="${session.user.username=='admin' and user.roles==1}" class="btn btn-primary waves-effect waves-light m-1">重置密码</button>  
+								</td>
+							</tr>
+							<tr>
+								<th scope="row" colspan="8"><span>[[${pager.size}
+										]] Records</span> &nbsp;&nbsp;&nbsp;&nbsp; <span class="current">
+										The [[${pager.page }]] Page</span> &nbsp;&nbsp;&nbsp;&nbsp; <span
+									class="current">[[${pager.pages }]] Pages</span>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<button type="button" id="submit_first"
+										th:submit_url="@{/admin/users/}+${pager.first}"
+										class="btn btn-outline-danger btn-round waves-effect waves-light m-1">First</button>
+									<button type="button" id="submit_pre"
+										th:submit_url="@{/admin/users/}+${pager.pre}"
+										class="btn btn-outline-success btn-round waves-effect waves-light m-1">Previous</button>
+									<button type="button" id="submit_next"
+										th:submit_url="@{/admin/users/}+${pager.next}"
+										class="btn btn-outline-info btn-round waves-effect waves-light m-1">Next</button>
+									<button type="button" id="submit_last"
+										th:submit_url="@{/admin/users/}+${pager.last}"
+										class="btn btn-outline-warning btn-round waves-effect waves-light m-1">Last page</button>
+										</th>
+							</tr>
+						</tbody>
+
+					</table>
+				</form>
+            </div>
+		    <!--End Row-->
+		    
+    </div><!--container-fluid-->  
+ </div><!--End content-wrapper-->
+
+<a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+
+<div th:replace="/admin/share/common::footer"></div>
+
+</div>
+<!-- 0end wrapper-->
+
+<div th:replace="/admin/share/common::js"></div>
+
+	<script type="text/javascript"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/jquery-1.8.3.js}"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/split.js}"></script>	
+	
+</body>
+</html>
+
+

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/admin/share/common::head(title='Append Images')}"></head>
+<body>
+
+<div id="pageloader-overlay" class="visible incoming"><div class="loader-wrapper-outer"><div class="loader-wrapper-inner" ><div class="loader"></div></div></div></div>
+
+<!-- 0Start wrapper-->
+ <div id="wrapper">
+    <div th:replace="/admin/share/common::wrapper"></div>
+    <div th:replace="/admin/share/common::topbar"></div> 
+    <div class="clearfix"></div>
+    <div class="content-wrapper">
+         <div class="container-fluid">	
+               <!-- Breadcrumb-->
+               <div class="row pt-2 pb-2" th:replace="/admin/share/common::map(table='Images',page='Append Images')"></div>
+   
+                <!-- Content-->
+		       <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body"  >
+            <form th:each="img,stat:${images}">
+                <h4 class="form-header text-uppercase">
+                  <i class="fa fa-user-circle-o"></i>
+                </h4>
+
+          <div  > 
+               <div  > 
+                     <div class="form-group row"  >
+
+                            <div class="col-sm-5" >
+                                <input type="hidden"    class="form-control"  th:value="${images!=null?img.goodsid:0}" name="goodsid">
+                             </div>
+                     </div>
+                     <div class="form-group row" >
+ 
+                            <div class="col-sm-5" >
+                                <input type="hidden"    class="form-control"  th:value="${img.id}" name="id">
+                             </div>
+                     </div>  
+                     <div class="form-group row"  >
+                         <input type="text"  class="form-control"   th:value="'商品图片'+${stat.index+1}">
+                             <div class="col-sm-4">
+                                <img  style="width:200px;"  th:src="@{${img.imgpath}}" name="imgpath">
+                             </div>
+                     </div> 
+                  
+              </div> 
+           </div>
+           </form>
+            <form id="form" enctype="multipart/form-data" method="post" >
+                <h4 class="form-header">
+                <i class="fa fa-file-text-o"></i>
+                  REQUIREMENTS
+                </h4>
+                 <div class="col-sm-5" >
+                                <input type="hidden"      th:value="${goodsid}" id="goodsid">
+                  </div>
+                  <div class="dropzone" >
+                    <div class="form-group row">
+                          <label for="input-8" class="col-sm-2 col-form-label">Select Photo</label>
+                             <div class="col-sm-6">
+                                <input type="file" class="form-control"  name="file" required>
+                            </div>
+                     </div>
+                       <div class="form-group row">
+                          <label for="input-8" class="col-sm-2 col-form-label">Select Photo</label>
+                             <div class="col-sm-6">
+                                <input type="file" class="form-control"  name="file" required>
+                            </div>
+                     </div>
+                       <div class="form-group row">
+                          <label for="input-8" class="col-sm-2 col-form-label">Select Photo</label>
+                             <div class="col-sm-6">
+                                <input type="file" class="form-control"  name="file" required>
+                            </div>
+                     </div>
+                      <div class="form-group row">
+                          <label for="input-8" class="col-sm-2 col-form-label">Select Photo</label>
+                             <div class="col-sm-6">
+                                <input type="file" class="form-control"  name="file" required>
+                            </div>
+                     </div>
+                  </div>
+                <div class="form-footer" >
+                    <button type="button" onclick="javascript:history.back(-1);" class="btn btn-danger"><i class="fa fa-times"></i> CANCEL</button>
+                    <button type="submit"  onclick="split_submit(this)" th:submit_url="@{/admin/image/}"class="btn btn-success"><i class="fa fa-check-square-o"></i> 保存</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--End Row-->
+
+		
+		    
+    </div><!--container-fluid-->  
+ </div><!--End content-wrapper-->
+    
+
+<a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+
+<div th:replace="/admin/share/common::footer"></div>
+
+</div>
+<!-- 0end wrapper-->
+<div th:replace="/admin/share/common::js"></div>
+
+
+<script type="text/javascript"></script>
+<script type="text/javascript" th:src="@{/admin/assets/js/jquery-1.8.3.js}"></script>
+<script type="text/javascript" th:src="@{/admin/assets/js/split.js}"></script>
+<script type="text/javascript" th:src="@{/admin/assets/js/button_operateSpec.js}"></script>	
+<script type="text/javascript" th:src="@{/admin/assets/js/button_operate.js}"></script>
+<script type="text/javascript" th:src="@{/admin/assets/js/button_operateImages.js}"></script>
+<script>
+
+</script>
+</body>
+</html>
+

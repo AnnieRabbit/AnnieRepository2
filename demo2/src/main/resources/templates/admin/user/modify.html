@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/admin/share/common::head(title='编辑用户信息')}"></head>
+<body>
+<div id="pageloader-overlay" class="visible incoming"><div class="loader-wrapper-outer"><div class="loader-wrapper-inner" ><div class="loader"></div></div></div></div>
+
+<!-- 0Start wrapper-->
+ <div id="wrapper">
+    <div th:replace="/admin/share/common::wrapper(username='Admin')"></div>
+    <div th:replace="/admin/share/common::topbar"></div> 
+    <div class="clearfix"></div>
+    <div class="content-wrapper">
+         <div class="container-fluid">	
+               <!-- Breadcrumb-->
+               <div class="row pt-2 pb-2" th:replace="/admin/share/common::map(table='User',page='Modify')"></div>
+   
+                <!-- Content-->
+		       <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <form id="form" enctype="multipart/form-data" th:action="@{/admin/user/}+${user.id}" method="post">
+                
+                <h4 class="form-header text-uppercase">
+                  <i class="fa fa-user-circle-o"></i>
+                   Personal Info
+                </h4>
+                <div class="form-group row">
+                  <label for="input-1" class="col-sm-2 col-form-label">用户名</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="input-1" name="username"  th:value="${user.username}" required>
+                  </div>
+                </div>
+                
+                
+               <div class="form-group row">
+                  <label for="input-1" class="col-sm-2 col-form-label">真实姓名</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="input-1" name="realname" th:value="${user.realname}" required>
+                  </div>
+                </div>
+               <div class="form-group row">
+                 <label for="input-1" class="col-sm-2 col-form-label">性别</label>&nbsp;&nbsp;&nbsp;
+                      <div class="icheck-material-success">
+                          <input type="radio" id="success1"  name="sex" value="男" th:checked="${user.sex=='男'}"/>
+                          <label for="success1">男</label>
+                      </div>&nbsp;&nbsp;&nbsp;
+                      <div class="icheck-material-danger">
+                         <input type="radio" id="danger1"   name="sex"  value="女" th:checked="${user.sex=='女'}"/>
+                         <label for="danger1">女</label>
+                      </div>
+                </div>
+                 <div class="form-group row">
+                   
+                </div>
+                <div class="form-group row">
+                  <label for="input-3" class="col-sm-2 col-form-label">E-mail</label>
+                  <div class="col-sm-10">
+                    <input type="email" class="form-control" id="input-3" name="email" th:value="${user.email}" required>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="input-4" class="col-sm-2 col-form-label">联系电话</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="input-4" name="tel"  th:value="${user.tel}" required>
+                  </div>
+                 
+                </div>
+                <h4 class="form-header">
+                <i class="fa fa-file-text-o"></i>
+                  REQUIREMENTS
+                </h4>
+            
+                <div class="form-group row">
+                  <label for="input-8" class="col-sm-2 col-form-label">改变头像</label>
+                  <div class="col-sm-10">
+                    <input type="file" class="form-control" id="input-8" name="file" required>
+                  </div>
+                </div>
+                
+                 <div class="form-group row">
+                  <label for="input-8" class="col-sm-2 col-form-label">头像</label>
+                  <div class="col-sm-10">
+                  <img alt="用户头像" th:src="@{${user.path}}" style="width:300px">
+                  </div>
+                </div>
+                
+                <div class="form-footer">
+                    <a type="button" class="btn btn-danger" th:href="@{/admin/users/1}" th:if="${state=='d'}"><i class="fa fa-times"></i> 返回列表</a> 
+                    <button type="submit"  class="btn btn-success"   th:if="${state!='d'}"><i class="fa fa-check-square-o"></i> 保存编辑</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--End Row-->
+
+		
+		    
+    </div><!--container-fluid-->  
+ </div><!--End content-wrapper-->
+    
+
+<a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+
+<div th:replace="/admin/share/common::footer"></div>
+
+</div>
+<!-- 0end wrapper-->
+<div th:replace="/admin/share/common::js"></div>
+
+
+<script type="text/javascript"></script>
+<script type="text/javascript" th:src="@{/admin/assets/js/jquery-1.8.3.js}"></script>
+<script type="text/javascript">
+
+$("#submit_modify").click(function(){
+	var action=$(this).attr("modify_url");
+	$("m_form").prop("action",action).submit();
+});
+</script>
+</body>
+</html>
+

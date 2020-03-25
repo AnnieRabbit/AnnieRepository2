@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="UTF-8" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/admin/share/common::head(title='index')}"></head>
+<body>
+<div id="pageloader-overlay" class="visible incoming"><div class="loader-wrapper-outer"><div class="loader-wrapper-inner" ><div class="loader"></div></div></div></div>
+
+<!-- 0Start wrapper-->
+ <div id="wrapper">
+ 
+    <div th:replace="/admin/share/common::wrapper"></div>
+    <div th:replace="/admin/share/common::topbar"></div> 
+    <div class="clearfix"></div>
+    <div class="content-wrapper">
+         <div class="container-fluid">	
+               <!-- Breadcrumb-->
+               <div class="row pt-2 pb-2" th:replace="/admin/share/common::map(table='Brand',page='List')"></div>
+   
+      <!-- startContent-->
+		     <div>
+				<form id="form" method="post">
+					<table class="table table-striped">
+
+						<thead>
+							<tr align="left">
+								<th scope="col" colspan="9">
+
+									<div  id="dateragne-picker">
+									<div style="float: left;margin-right:10px; margin-top:5px; "  >
+										<input class="form-control"  id="brandname" type="text" placeholder="请输入品牌名称"
+											name="brandname" th:value="${condition.brandname}" style="height: 35px; vertical-align: middle;">
+									</div>	
+							
+									
+										<div class="input-daterange input-group" style="float: left;width:300px; margin-top:5px;">
+											<input type="text" class="form-control"  name="beginTime" th:value="${beginTime}" id="beginTime"
+												 placeholder="beginTime" />
+											<div class="input-group-prepend">
+												<span class="input-group-text">to</span>
+											</div>
+											<input type="text" class="form-control" name="endTime" th:value="${endTime}" id="endTime"
+												placeholder="endTime" />
+										</div>
+									</div>
+									<button type="submit"
+										class="btn btn-info waves-effect waves-light m-1">&nbsp;搜&nbsp;&nbsp;索&nbsp;</button>
+								<button type="button" class="btn btn-warning waves-effect waves-light m-1" id="append" style="border:none;"
+										onclick="get(this)" th:hr="@{/admin/brand/}" >&nbsp;添&nbsp;&nbsp;加&nbsp;</button>
+								</th>
+							</tr>
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">品牌名称</th>
+								<th scope="col" >添加时间</th>
+								<th scope="col">品牌Logo</th>
+								<th scope="col">显示顺序</th>
+								<th scope="col">是否推荐</th>
+								<th scope="col">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="obj,stat:${pager.datas}">
+								<td th:text="${stat.index+1}"></td>
+								<td th:text="${obj.brandname}"></td>
+								<td th:text="${obj.addtime}"></td>
+								<td >
+		   						     <img alt="品牌图片" th:src="@{${obj.path}}" style="width:120px; height:60px;">
+								</td>
+								<td th:text="${obj.seq}"></td>
+								<td th:text="${obj.recommend==1?'推荐' : '不推荐'}"></td>
+						
+								<td>
+					           	<button type="button" th:onclick="get(this)" th:hr="@{/admin/brand/modify/}+${obj.id}"  class="btn btn-success">编辑</button>
+					           <!-- 	<button id="edit" th:edit_url="@{/admin/brand/modify/}+${obj.id}"    th:if="${session.user.username=='admin' or user.roles==1}" type="button" class="btn btn-success">编辑</button> -->
+								<button id="del"  th:url="@{/admin/brand/ajaxRemove}" th:onclick="|ajaxRemove(${obj.id})|" type="button" class="btn  btn-primary">删除</button>
+								</td>   
+							</tr>
+							<tr>
+								<th scope="row" colspan="8"><span>[[${pager.size}
+										]] Records</span> &nbsp;&nbsp;&nbsp;&nbsp; <span class="current">
+										The [[${pager.page }]] Page</span> &nbsp;&nbsp;&nbsp;&nbsp; <span
+									class="current">[[${pager.pages }]] Pages</span>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<button type="button" id="submit_first"
+										th:submit_url="@{/admin/brands/}+${pager.first}"
+										class="btn btn-outline-danger btn-round waves-effect waves-light m-1">First</button>
+									<button type="button" id="submit_pre"
+										th:submit_url="@{/admin/brands/}+${pager.pre}"
+										class="btn btn-outline-success btn-round waves-effect waves-light m-1">Previous</button>
+									<button type="button" id="submit_next"
+										th:submit_url="@{/admin/brands/}+${pager.next}"
+										class="btn btn-outline-info btn-round waves-effect waves-light m-1">Next</button>
+									<button type="button" id="submit_last"
+										th:submit_url="@{/admin/brands/}+${pager.last}"
+										class="btn btn-outline-warning btn-round waves-effect waves-light m-1">Last page</button>
+										</th>
+							</tr>
+						</tbody>
+
+					</table>
+				</form>
+				<form  method="post">
+					<input type="hidden" name="_method" value="put">
+				</form>
+            </div>
+		    <!--End Row-->
+		    
+    </div><!--container-fluid-->  
+ </div><!--End content-wrapper-->
+
+<a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+
+<div th:replace="/admin/share/common::footer"></div>
+
+</div>
+<!-- 0end wrapper-->
+
+<div th:replace="/admin/share/common::js"></div>
+
+	<script type="text/javascript"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/jquery-1.8.3.js}"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/button_operate.js}"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/split.js}"></script>	
+	
+	
+<script>
+function ajaxRemove(id){
+	if(window.confirm("删除的信息将不可恢复，确定删除吗？")){
+	var url=$("#del").attr("url")
+	$.post(url,"id="+id ,function(data){
+		if(data){
+			alert("该品牌下存在商品，不能被删除!");
+		}else{
+			location.href="/Shopping/admin/brand/remove/"+id;
+			alert("删除成功!");
+			}
+		},"json")
+		
+	}
+		}
+		
+</script>	
+
+	<script type="text/javascript">
+	
+	function get(element){
+		var action=$(element).attr("hr");	
+		location.href=action;
+	}
+
+	
+	</script>
+
+</body>
+</html>
+
+

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="UTF-8" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/admin/share/common::head(title='index')}"></head>
+<body>
+<div id="pageloader-overlay" class="visible incoming"><div class="loader-wrapper-outer"><div class="loader-wrapper-inner" ><div class="loader"></div></div></div></div>
+
+<!-- 0Start wrapper-->
+ <div id="wrapper">
+ 
+    <div th:replace="/admin/share/common::wrapper"></div>
+    <div th:replace="/admin/share/common::topbar"></div> 
+    <div class="clearfix"></div>
+    <div class="content-wrapper">
+         <div class="container-fluid">	
+               <!-- Breadcrumb-->
+               <div class="row pt-2 pb-2" th:replace="/admin/share/common::map(table='Login',page='List')"></div>
+   
+      <!-- startContent-->
+		     <div>
+				<form id="form" method="post">
+					<table class="table table-striped">
+
+						<thead>
+							<tr align="left">
+								<th scope="col" colspan="9">
+
+									<div  id="dateragne-picker">
+									<div style="float: left;margin-right:10px; margin-top:5px; "  >
+										<input   class="form-control"  id="username" type="text" placeholder="请输入用户名称"
+											th:value="${condition.username}"name="username" style="height: 35px; vertical-align: middle;">
+									</div>	
+							
+									
+										<div class="input-daterange input-group" style="float: left;width:300px; margin-top:5px;">
+											<input type="text" class="form-control"  name="beginTime" th:value="${beginTime}" id="beginTime"
+												 placeholder="beginTime" />
+											<div class="input-group-prepend">
+												<span class="input-group-text">to</span>
+											</div>
+											<input type="text" class="form-control" name="endTime" th:value="${endTime}" id="endTime"
+												placeholder="endTime" />
+										</div>
+									</div>
+									<button type="submit" class="btn btn-info waves-effect waves-light m-1">&nbsp;搜&nbsp;&nbsp;索&nbsp;</button>
+									<button type="button" id="deletes" onclick="deletes(this)" th:submit_url="@{/admin/login}" class="btn btn-warning waves-effect waves-light m-1" >批&nbsp;量&nbsp;删&nbsp;除&nbsp;</button>	
+								</th>
+							</tr>
+							<tr>
+							    <th scope="col">
+						            <input id="checkAll" class="checkall" type="checkbox" >
+					            </th>
+								<th scope="col">#</th>
+								<th scope="col">ID</th>
+								<th scope="col">用户名</th>
+								<th scope="col" >登陆时间</th>
+								<th scope="col">登录ip</th>
+								<th scope="col">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="obj,stat:${pager.datas}">
+							    <td scope="col" id="td">
+						            <input type="checkbox" th:value="${obj.id}" id="ids" name="ids" class="checkone" >
+					            </td>
+								<td th:text="${stat.index+1}"></td>
+								<td th:text="${obj.id}"></td>
+								<td th:text="${obj.username}"></td>
+								<td th:text="${obj.logintime}"></td>
+								<td th:text="${obj.ip}"></td>
+								<td>
+								<button id="del"  th:url="@{/admin/login/ajaxRemove}" th:onclick="|ajaxRemove(${obj.id})|" type="button" class="btn  btn-primary">删除</button>
+								</td>   
+							</tr>
+							<tr>
+								<th scope="row" colspan="8"><span>[[${pager.size}
+										]] Records</span> &nbsp;&nbsp;&nbsp;&nbsp; <span class="current">
+										The [[${pager.page }]] Page</span> &nbsp;&nbsp;&nbsp;&nbsp; <span
+									class="current">[[${pager.pages }]] Pages</span>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<button type="button" id="submit_first"
+										th:submit_url="@{/admin/logins/}+${pager.first}"
+										class="btn btn-outline-danger btn-round waves-effect waves-light m-1">First</button>
+									<button type="button" id="submit_pre"
+										th:submit_url="@{/admin/logins/}+${pager.pre}"
+										class="btn btn-outline-success btn-round waves-effect waves-light m-1">Previous</button>
+									<button type="button" id="submit_next"
+										th:submit_url="@{/admin/logins/}+${pager.next}"
+										class="btn btn-outline-info btn-round waves-effect waves-light m-1">Next</button>
+									<button type="button" id="submit_last"
+										th:submit_url="@{/admin/logins/}+${pager.last}"
+										class="btn btn-outline-warning btn-round waves-effect waves-light m-1">Last page</button>
+										</th>
+							</tr>
+						</tbody>
+
+					</table>
+				</form>
+				<form  method="post">
+					<input type="hidden" name="_method" value="put">
+				</form>
+            </div>
+		    <!--End Row-->
+		    
+    </div><!--container-fluid-->  
+ </div><!--End content-wrapper-->
+
+<a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+
+<div th:replace="/admin/share/common::footer"></div>
+
+</div>
+<!-- 0end wrapper-->
+
+<div th:replace="/admin/share/common::js"></div>
+
+	<script type="text/javascript"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/jquery-1.8.3.js}"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/button_operate.js}"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/split.js}"></script>	
+	<script type="text/javascript" th:src="@{/admin/assets/plugins/notifications/js/lobibox.min.js}"></script>	
+	<script type="text/javascript" th:src="@{/admin/assets/plugins/notifications/js/notifications.min.js}"></script>	
+	<script type="text/javascript" th:src="@{/admin/assets/plugins/notifications/js/notification-custom-script.js}"></script>
+	
+<script>
+
+   
+function ajaxRemove(id){
+	if(window.confirm("删除的信息将不可恢复，确定删除吗？")){
+	var url=$("#del").attr("url")
+	
+			location.href="/Shopping/admin/login/remove/"+id;
+			 alert("删除成功!"); 
+			
+	}
+		} 
+$("#deletes").on('click',function(){
+	if(window.confirm("删除的信息将不可恢复，确定删除吗？")){
+	var ids=new Array();
+
+	$("td").find("input[type='checkbox']:checked").each(function(){
+		ids.push($(this).val());
+	})
+	
+    var submit_url=$(this).attr("submit_url");	
+	$.post(submit_url,{'_method':'delete' ,'ids': ids.toString()},function(data){
+		if(data)
+			
+			location.href="/Shopping/admin/logins/1";
+			alert("批量删除成功!");
+			
+		},"json")
+	}
+})		
+ 		
+</script>	
+<script type="text/javascript">								
+			    $(".checkall").click(function(){
+			      $("input[type='checkbox']").prop("checked",$(this).prop("checked")); 			    	
+				})
+				 $(".checkone").click(function(){
+					 
+					var a=$(".checkone").length; 
+					var s= $(".checkone:checked").length;
+					if(a==s){
+						$(".checkall").prop("checked",true);
+						
+					}else{
+						
+						$(".checkall").prop("checked",false);
+					} 
+				})
+				
+</script>
+</body>
+</html>
+
+

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="shopping.dao.View_OrderDao">
+
+
+ <!--sql -->
+<sql id="where_sql">
+		<if test="condition!=null">
+			<if test="condition.goodsname!=null and condition.goodsname!=''">
+				and goodsname like '%' #{condition.goodsname} '%'
+			</if>
+			<if test="condition.ordercode!=null and condition.ordercode!=''">
+				and ordercode like '%' #{condition.ordercode} '%'
+			</if>
+			<if test="condition.state!=0">
+				and state = #{condition.state}
+			</if>	
+		</if>
+	
+	</sql>
+    <!-- 条件查询 -->
+	<select id="selectsByCondition" resultType="shopping.domain.View_Order">
+		select * from view_order   
+		
+		<where>
+			<include refid="where_sql"/>
+				and ordercode=#{ordercode} 
+		</where>
+		  
+		<if test="skip!=0 or take !=0">
+		limit ${skip},${take}
+		</if>
+	</select>
+	 
+
+</mapper>

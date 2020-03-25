@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/admin/share/common::head(title='ERROR')}"></head>
+<body>
+
+<div id="pageloader-overlay" class="visible incoming"><div class="loader-wrapper-outer"><div class="loader-wrapper-inner" ><div class="loader"></div></div></div></div>
+
+<!-- 0Start wrapper-->
+ <div id="wrapper">
+    <div th:replace="/admin/share/common::wrapper"></div>
+    <div th:replace="/admin/share/common::topbar"></div> 
+    <div class="clearfix"></div>
+    <div class="content-wrapper">
+         <div class="container-fluid">	
+               <!-- Breadcrumb-->
+               <div class="row pt-2 pb-2" th:replace="/admin/share/common::map(table='User',page='ERROR')"></div>
+   
+                <!-- Content-->
+		       <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+             <h2 style="margin:100px 0px">Error</h2>
+             <h4>error information:[[${msg}]]</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--End Row-->
+
+		
+		    
+    </div><!--container-fluid-->  
+ </div><!--End content-wrapper-->
+    
+
+<a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+
+<div th:replace="/admin/share/common::footer"></div>
+
+</div>
+<!-- 0end wrapper-->
+<div th:replace="/admin/share/common::js"></div>
+
+
+<script type="text/javascript"></script>
+<script type="text/javascript" th:src="@{/admin/assets/js/jquery-1.8.3.js}"></script>
+
+</body>
+</html>
+

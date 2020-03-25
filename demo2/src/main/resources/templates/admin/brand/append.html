@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/admin/share/common::head(title='Append Admin')}"></head>
+<body>
+
+<div id="pageloader-overlay" class="visible incoming"><div class="loader-wrapper-outer"><div class="loader-wrapper-inner" ><div class="loader"></div></div></div></div>
+
+<!-- 0Start wrapper-->
+ <div id="wrapper">
+    <div th:replace="/admin/share/common::wrapper"></div>
+    <div th:replace="/admin/share/common::topbar"></div> 
+    <div class="clearfix"></div>
+    <div class="content-wrapper">
+         <div class="container-fluid">	
+               <!-- Breadcrumb-->
+               <div class="row pt-2 pb-2" th:replace="/admin/share/common::map(table='Brand',page='Register')"></div>
+   
+                <!-- Content-->
+		       <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <form id="personal-info" enctype="multipart/form-data" th:action="@{/admin/brand}" method="post">
+                <h4 class="form-header text-uppercase">
+                  <i class="fa fa-user-circle-o"></i>
+                  Brand
+                </h4>
+                <div class="form-group row">
+                  <label for="input-1" class="col-sm-2 col-form-label">品牌名称</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="input-1" name="brandname" required>
+                  </div>
+                </div>
+           
+         
+               <div class="form-group row">
+                  <label for="input-1" class="col-sm-2 col-form-label">品牌顺序</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="input-1" name="seq" required>
+                  </div>
+                </div>
+               <div class="form-group row">
+                 <label for="input-1" class="col-sm-2 col-form-label">是否推荐</label>&nbsp;&nbsp;&nbsp;
+                  <select name="recommend">
+                          <option value='0'>---请选择是否推荐---</option>
+                          <option value='1'  >---是---</option>
+                          <option value='2' >---否---</option>
+                  </select>
+                </div>
+               
+                <h4 class="form-header">
+                <i class="fa fa-file-text-o"></i>
+                  REQUIREMENTS
+                </h4>
+
+                <div class="form-group row">
+                  <label for="input-8" class="col-sm-2 col-form-label">Select Photo</label>
+                  <div class="col-sm-10">
+                    <input type="file" class="form-control" id="input-8" name="file" required>
+                  </div>
+                </div>
+                
+                 <div class="form-group row">
+                  <label for="input-8" class="col-sm-2 col-form-label">[[${msg}]]</label>
+                 </div>
+                
+                <div class="form-footer">
+                    <button type="button" onclick="javascript:history.back(-1);" class="btn btn-danger"><i class="fa fa-times"></i> CANCEL</button>
+                    <button type="submit" class="btn btn-success"><i class="fa fa-check-square-o"></i> SAVE</button>
+    
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--End Row-->
+
+		
+		    
+    </div><!--container-fluid-->  
+ </div><!--End content-wrapper-->
+    
+
+<a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+
+<div th:replace="/admin/share/common::footer"></div>
+
+</div>
+<!-- 0end wrapper-->
+<div th:replace="/admin/share/common::js"></div>
+
+
+<script type="text/javascript"></script>
+<script type="text/javascript" th:src="@{/admin/assets/js/jquery-1.8.3.js}"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="shopping.dao.LoginDao">		
+
+	<sql id="where_sql">
+		<if test="condition!=null">
+			<if test="condition.username!=null and condition.username!=''">
+				and username like '%' #{condition.username} '%'
+			</if>
+		</if>
+		<if	test="(beginTime!=null and beginTime!='') and (endTime!=null and endTime!='')">
+			and logintime between #{beginTime} and #{endTime}
+		</if>
+		<if
+			test="(beginTime!=null and beginTime!='') and (endTime==null or endTime=='')">
+			and logintime between #{beginTime} and now()
+		</if>
+
+		<if
+			test="(beginTime==null or beginTime=='') and (endTime!=null and endTime!='')">
+			and logintime between '1970-01-01' and #{endTime}
+		</if>
+	</sql>
+    <!-- 分页条件查询 -->
+	<select id="selectByCondition" resultType="shopping.domain.Login">
+		select * from tb_login
+		<where>
+			<include refid="where_sql"/>
+		</where>
+		<if test="skip!=0 or take !=0">
+		limit ${skip},${take}
+		</if>
+	</select>
+
+    <!--    总记录数 -->
+	<select id="sizeLoginByCondition" resultType="integer">
+		select count(1) from tb_login
+		<where>
+			<include refid="where_sql" />
+		</where>
+	</select>
+	
+	 <!--添加 -->
+	 <insert id="insert">
+	     insert into tb_login
+	      (userid,username,logintime,ip)
+	     values
+	      (#{userid},#{username},now(),#{ip})
+	 </insert>
+
+	  <!--   删除 -->
+	 <delete id="delete">
+	     delete from tb_login where id=#{id}
+	 </delete>
+	 
+	 <!-- 批量删除 -->
+   <delete id="deletes">
+           delete from tb_login
+		<where>
+		<foreach collection="ids" item="id" separator="or">
+			id=#{id}
+		</foreach>
+      	</where>
+    </delete> 
+	
+</mapper>

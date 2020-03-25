@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="UTF-8" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+  <title th:text="${title}"></title>
+  <!--favicon-->
+  <link rel="icon" th:href="@{/static/admin/assets/images/favicon.ico}" type="image/x-icon">
+  
+  <!--Select Plugins-->
+  <link th:href="@{/static/admin/assets/plugins/select2/css/select2.min.css}" rel="stylesheet"/>
+  <!--inputtags-->
+  <link th:href="@{/static/admin/assets/plugins/inputtags/css/bootstrap-tagsinput.css}" rel="stylesheet" />
+  <!--multi select-->
+  <link th:href="@{/static/admin/assets/plugins/jquery-multi-select/multi-select.css}" rel="stylesheet" type="text/css">
+  <!--Bootstrap Datepicker-->
+  <link th:href="@{/static/admin/assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css">
+  <!--Touchspin-->
+  <link th:href="@{/static/admin/assets/plugins/bootstrap-touchspin/css/jquery.bootstrap-touchspin.css}" rel="stylesheet" type="text/css">
+  
+  <!-- Vector CSS -->
+  <link th:href="@{/static/admin/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css}" rel="stylesheet"/>
+  <!-- simplebar CSS-->
+  <link th:href="@{/static/admin/assets/plugins/simplebar/css/simplebar.css}" rel="stylesheet"/>
+  <!-- Bootstrap core CSS-->
+  <link th:href="@{/static/admin/assets/css/bootstrap.min.css}" rel="stylesheet"/>
+  <!-- animate CSS-->
+  <link th:href="@{/static/admin/assets/css/animate.css}" rel="stylesheet" type="text/css"/>
+  <!-- Icons CSS-->
+  <link th:href="@{/static/admin/assets/css/icons.css}" rel="stylesheet" type="text/css"/>
+  <!-- Sidebar CSS-->
+  <link th:href="@{/static/admin/assets/css/sidebar-menu.css}" rel="stylesheet"/>
+  <!-- Custom Style-->
+  <link th:href="@{/static/admin/assets/css/app-style.css}" rel="stylesheet"/></head>
+
+<body class="bg-facebook">
+
+   <div id="pageloader-overlay" class="visible incoming"><div class="loader-wrapper-outer"><div class="loader-wrapper-inner" ><div class="loader"></div></div></div></div>
+
+
+<!-- Start wrapper-->
+ <div id="wrapper">
+
+	<div class="card card-authentication1 mx-auto my-4">
+		<div class="card-body">
+		 <div class="card-content p-2">
+		 	<div class="text-center">
+		 		<img th:src="@{/static/admin/assets/images/logo-icon.png}" alt="logo icon">
+		 	</div>
+		  <div class="card-title text-uppercase text-center py-3">Login</div>
+		    <form  th:action="@{/admin/login}" method="post">
+			  <div class="form-group">
+			  <label for="exampleInputName" class="sr-only">Name</label>
+			   <div class="position-relative has-icon-right">
+				  <input type="text" name="username" id="exampleInputName" class="form-control input-shadow" placeholder="请输入用户名">
+				  <div class="form-control-position">
+					  <i class="icon-user"></i>
+				  </div>
+			   </div>
+			  </div>
+			  <div class="form-group">
+			  <label for="exampleInputEmailId" class="sr-only">PassWord</label>
+			   <div class="position-relative has-icon-right">
+				  <input type="password" name="password" id="exampleInputEmailId" class="form-control input-shadow" placeholder="请输入密码">
+				  <div class="form-control-position">
+				  <i class="icon-lock"></i>
+				  </div>
+			   </div>
+			  </div>
+			  <div class="form-group">
+			   <label for="exampleInputPassword" class="sr-only">CheckCode</label>
+			   <div class="position-relative has-icon-right">
+				  <input type="text" class="form-control" id="validate_code" name="validate_code" required style="width: 200px; float: left" placeholder="请输入验证码">
+				  <div class="form-control-position">
+					   <i class="icon-envelope-open"></i>
+				  </div>
+				  <img id="validate_img" style="width: 100px; height: 38px; float: left" th:src="@{/admin/validate?1=1}" title="单击更换">
+			   </div>
+			  </div>
+               <br/><br/>	
+               <div >
+			     <div class="position-relative has-icon-right" >
+				     <span  th:if=${msg!=null} class="form-control input-shadow">[[${msg}]]</span>
+			   </div> 
+			  </div>	  
+			 <input type="submit" class="btn btn-primary btn-block waves-effect waves-light" />
+			 </form>
+		   </div>
+		  </div>
+		 
+	     </div>
+    
+   
+    <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+
+	</div>
+	<!--wrapper-->
+
+ <!-- Bootstrap core JavaScript-->
+  <script th:src="@{/static/admin/assets/js/jquery.min.js}"></script>
+  <script th:src="@{/static/admin/assets/js/popper.min.js}"></script>
+  <script th:src="@{/static/admin/assets/js/bootstrap.min.js}"></script>
+	
+  <!-- sidebar-menu js -->
+  <script th:src="@{/static/admin/assets/js/sidebar-menu.js}"></script>
+  
+  <!-- Custom scripts -->
+  <script th:src="@{/static/admin/assets/js/app-script.js}"></script>
+  
+  <!-- 自定义脚本 -->
+  <script type="text/javascript" th:src="@{/static/admin/assets/js/validate_img.js}"></script>
+</body>
+</html>

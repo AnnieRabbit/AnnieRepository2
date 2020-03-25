@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="shopping.dao.BrandDao">
+	<sql id="where_sql">
+		<if test="condition!=null">
+			<if test="condition.brandname!=null and condition.brandname!=''">
+				and brandname like '%' #{condition.brandname} '%'
+			</if>
+		</if>
+		<if	test="(beginTime!=null and beginTime!='') and (endTime!=null and endTime!='')">
+			and addtime between #{beginTime} and #{endTime}
+		</if>
+		<if
+			test="(beginTime!=null and beginTime!='') and (endTime==null or endTime=='')">
+			and addtime between #{beginTime} and now()
+		</if>
+
+		<if
+			test="(beginTime==null or beginTime=='') and (endTime!=null and endTime!='')">
+			and addtime between '1970-01-01' and #{endTime}
+		</if>
+	</sql>
+    <!-- 分页条件查询 -->
+	<select id="selectByCondition" resultType="shopping.domain.Brand">
+		select * from tb_brand
+		<where>
+			<include refid="where_sql"/>
+		</where>
+		<if test="skip!=0 or take !=0">
+		limit ${skip},${take}
+		</if>
+	</select>
+
+    <!--    总记录数 -->
+	<select id="sizeBrandByCondition" resultType="integer">
+		select count(1) from tb_brand
+		<where>
+			<include refid="where_sql" />
+		</where>
+	</select>
+	
+		
+	 <!--添加 -->
+	 <insert id="insert">
+	     insert into tb_brand (addtime,brandname,path,seq,recommend)
+	     values(now(),#{brandname},#{path},#{seq},#{recommend})
+	 </insert>
+	 
+	  <!--   修改 -->
+	 <update id="update">
+	       update tb_brand
+	       <set>
+	            addtime=now(),
+	            <if test="brandname!=null">
+	               brandname=#{brandname},
+	            </if>
+	            <if test="path!=null">
+	               path=#{path},
+	            </if>
+	             <if test="seq!=null">
+	               seq=#{seq},
+	            </if>
+	              <if test="recommend!=0">
+	               recommend=#{recommend},
+	            </if>
+	       </set>
+	       <where>
+	              id=#{id}
+	       </where>
+	 </update>
+	 
+	  <!--   修改前详情 -->
+	 <select id="selectById" resultType="shopping.domain.Brand">
+	     select * from tb_brand  where id=#{id}
+	 </select>
+	 
+	  <!--   删除 -->
+	 <delete id="delete">
+	     delete from tb_brand where id=#{id}
+	 </delete>
+	 
+	 <!-- 判断该品牌下是否有商品 -->
+     <select id="selectGoodsCountByBrandId" resultType="integer">
+       select count(*) from tb_brand as b 
+       inner join tb_goods as g 
+       on b.id=g.brandid
+       where b.id=#{id}
+     </select>
+     
+      <!-- 查询所有品牌的列表 ,用于商品新增页-->
+	  <select id="selectBrandsCountByBrandId" resultType="shopping.domain.Brand">
+	      select id,brandname from tb_brand  
+	  </select>
+	
+</mapper>

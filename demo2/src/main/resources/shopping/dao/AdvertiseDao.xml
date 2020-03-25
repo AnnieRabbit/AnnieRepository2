@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="shopping.dao.AdvertiseDao">
+	<sql id="where_sql">
+		<if test="condition!=null">
+			<if test="condition.adname!=null and condition.adname!=''">
+				and adname like '%' #{condition.adname} '%'
+			</if>
+			<if test="condition.display!=0">
+				and display= #{condition.display}
+			</if>
+		</if>
+		<if	test="(beginTime!=null and beginTime!='') and (endTime!=null and endTime!='')">
+			and addtime between #{beginTime} and #{endTime}
+		</if>
+		<if
+			test="(beginTime!=null and beginTime!='') and (endTime==null or endTime=='')">
+			and addtime between #{beginTime} and now()
+		</if>
+		<if
+			test="(beginTime==null or beginTime=='') and (endTime!=null and endTime!='')">
+			and addtime between '1970-01-01' and #{endTime}
+		</if>
+	</sql>
+    <!-- 分页条件查询 -->
+	<select id="selectByCondition" resultType="shopping.domain.Advertise">
+		select * from tb_advertise
+		<where>
+			<include refid="where_sql"/>
+		</where>
+		<if test="skip!=0 or take !=0">
+		limit ${skip},${take}
+		</if>
+	</select>
+
+    <!--    总记录数 -->
+	<select id="sizeAdvertiseByCondition" resultType="integer">
+		select count(1) from tb_advertise
+		<where>
+			<include refid="where_sql" />
+		</where>
+	</select>
+	
+	 <!--    当前显示广告记录数 -->
+	<select id="sizeAdvertiseByDisplay" resultType="integer">
+		select count(1) from tb_advertise
+		where display=1
+	</select>
+	<!-- 进入修改页面自动改为不显示 -->
+	<update id="updateToNotDisplay">
+	       update tb_advertise set   display=2 where id=#{id}
+	</update>
+	
+	
+	 <!--添加 -->
+	 <insert id="insert">
+	     insert into tb_advertise (addtime,adname,path,url,seq,display)
+	     values(now(),#{adname},#{path},#{url},#{seq},#{display})
+	 </insert>
+	 
+	  <!--   修改 -->
+	 <update id="update">
+	       update tb_advertise
+	       <set>
+	            addtime=now(),
+	            <if test="adname!=null">
+	               adname=#{adname},
+	            </if>
+	            <if test="path!=null">
+	               path=#{path},
+	            </if>
+	            <if test="url!=null">
+	               url=#{url},
+	            </if>
+	             <if test="seq!=null">
+	               seq=#{seq},
+	            </if>
+	              <if test="display!=0">
+	               display=#{display},
+	            </if>
+	       </set>
+	       <where>
+	              id=#{id}
+	       </where>
+	 </update>
+	 
+	  <!--   修改前详情 -->
+	 <select id="selectById" resultType="shopping.domain.Advertise">
+	     select * from tb_advertise  where id=#{id}
+	 </select>
+	 
+	  <!--   删除 -->
+	 <delete id="delete">
+	     delete from tb_advertise  where id=#{id}
+	 </delete>
+	
+</mapper>

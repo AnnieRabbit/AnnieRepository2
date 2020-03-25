@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="shopping.dao.ClassDao">
+
+<!--   ******************多级共用方法start*******************  -->
+
+    <!-- 一级二级分类编辑按钮查详情(三级查详情写在view_ClassDao.xml) -->
+    <select id="selectFirstById" resultType="shopping.domain.Class">
+           select * from tb_class where id=#{id}
+    </select>
+    
+	<!-- 多级查顺序max值 -->
+	<select id="selectMaxSeqByLevel" resultType="integer"> 
+	    select max(seq) from tb_class where level=#{level}
+	</select>
+	
+	 <!-- 多级分类新增 -->
+	<insert id="insert">
+	    insert into tb_class
+	    (addtime,classname,seq,display,pid,level)
+	    values
+	    (now(),#{classname},#{seq},1,#{pid},#{level})
+	</insert>
+	
+	<!-- 多级分类删除 -->
+	<delete id="delete">
+	     delete from tb_class where id = #{id}
+	</delete>	
+	
+	 <!-- 多级编辑保存 -->
+	<update id="update">
+	   update tb_class 
+         <set>
+              <if test="classname!=null and classname!=''">
+                  classname=#{classname},
+              </if>
+              <if test="seq!=null and classname!=''">
+                  seq=#{seq} ,
+              </if>              
+                  pid=#{pid}         
+         </set>
+        <where>
+           id = #{id}
+        </where>
+	</update>
+<!--   ******************多级共用方法end*******************  -->
+
+
+	 <!-- 判断该分类下是否有商品 -->
+     <select id="selectGoodsCountByClassId" resultType="integer">
+         select count(*) from tb_class as c 
+         inner join tb_goods as g 
+         on c.id=g.classid
+         where c.id=#{id}
+     </select>
+     
+</mapper>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="UTF-8" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{/admin/share/common::head(title='index')}"></head>
+<body>
+<div id="pageloader-overlay" class="visible incoming"><div class="loader-wrapper-outer"><div class="loader-wrapper-inner" ><div class="loader"></div></div></div></div>
+
+<!-- 0Start wrapper-->
+ <div id="wrapper">
+ 
+    <div th:replace="/admin/share/common::wrapper"></div>
+    <div th:replace="/admin/share/common::topbar"></div> 
+    <div class="clearfix"></div>
+    <div class="content-wrapper">
+         <div class="container-fluid">	
+               <!-- Breadcrumb-->
+               <div class="row pt-2 pb-2" th:replace="/admin/share/common::map(table='Goods',page='List')"></div>
+   
+      <!-- startContent-->
+		     <div style="overflow-x:scroll">
+				<form id="form" method="post">
+					<table >
+						<tr align="left">
+							<th scope="col" colspan="9">
+									    <div  id="dateragne-picker">
+										   <div style="float: left;margin-right:10px; margin-top:5px; "  >
+											    <input  class="form-control"  id="goodsname" type="text" placeholder="请输入商品名称"
+												name="goodsname" th:value="${condition.goodsname}" style="height: 35px; vertical-align: middle;width:150px;">
+										   </div>	
+
+										   <div style="float: left;margin-right:10px; margin-top:5px; "  >
+											    <input id="goodscode" type="text" placeholder="请输入商品货号"
+												name="goodscode" th:value="${condition.goodscode }"class="form-control" style="height: 35px; vertical-align: middle;width:150px;">
+										   </div>		
+								         <!--   <div class="input-daterange input-group" style="float: left;width:300px; margin-top:5px;">
+												<input type="text" class="form-control"  name="beginTime" th:value="${beginTime}" id="beginTime"
+													 placeholder="beginTime" />
+												<div class="input-group-prepend">
+													<span class="input-group-text">to</span>
+												</div>
+										             <input type="text" class="form-control" name="endTime" th:value="${endTime}" id="endTime"
+													placeholder="endTime" />
+								          </div> -->
+								          <div style="float: left;margin-right:10px; margin-top:5px; "  >
+											      <select class="form-control"  id="input-2" name="brandid" >
+                                                         <option value="0"  >-请选择品牌-</option>
+					                                     <option th:each="brand:${brands}" th:selected="${condition.brandid eq brand.id}"  th:value="${brand.id}">[[${brand.brandname}]]</option>
+                                                  </select> 
+										   </div>
+								          <button type="submit"
+											class="btn btn-info waves-effect waves-light m-1">&nbsp;搜&nbsp;&nbsp;索&nbsp;</button>
+									    <button type="button" class="btn btn-warning waves-effect waves-light m-1" id="append" style="border:none;"
+											onclick="get(this)"  th:hr="@{/admin/good}">&nbsp;添&nbsp;&nbsp;加&nbsp;</button>
+								        </div>
+							         </th>
+							      </tr>
+							      </table>
+							      <table>
+							         <tr>
+							         <td>
+									   <div style="float: left;height:40px; margin-right:10px; margin-top:5px" >
+										    <select  id="firstClassId" name="first_id" style="height:36px;" class="form-control" th:submit_url="@{/admin/classes/second/ajaxSecondIndex/}">
+												   <option value="0"  >-请选择一级分类-</option>
+												   <option th:each="class,stat:${firstClasses}"  th:selected="${condition.first_id eq class.first_id}" th:value="${class.first_id}">[[${class.first_classname}]]</option>
+										    </select>							 
+										</div>
+										<div style="float: left;height:40px; margin-right:10px; margin-top:5px" >
+											  <select id="secondClassId" name="second_id" style="height:36px; float:left;" class="form-control" th:submit_url="@{/admin/classes/thrid/ajaxThridIndex/}">
+												  <option value="0"  >-请选择二级分类-</option>
+						                          <option th:each="sec:${secondClasses}"  th:selected="${condition.second_id eq sec.second_id}" th:value="${sec.second_id}">[[${sec.second_classname}]]</option>
+											  </select>  
+										</div>
+										<div style="float: left;height:40px; margin-right:10px; margin-top:5px" >
+											  <select  id="thridClassId" name="thrid_id" style="height:36px;" class="form-control" >
+												   <option value="0"  >-请选择三级分类-</option>
+												   <option  th:each="thr:${thridClasses}"   th:selected="${condition.thrid_id eq thr.thrid_id}" th:value="${thr.thrid_id}">[[${thr.thrid_classname}]]</option>
+											  </select>							 
+									    </div>
+									<div style="float: left;height:40px; margin-right:10px; margin-top:5px" >
+										<select style="height:36px;" class="form-control" id="input-6" name="state">
+										      <option value="0">--请选择状态--</option>
+										      <option value="1" th:selected="${condition.state==1}">上架</option>
+										      <option value="2" th:selected="${condition.state==2}">下架</option>
+										</select>
+									</div>
+								</td>
+							  </tr>
+						</table>
+						<table class="table table-striped">
+						 <thead>
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">商品名称</th>
+								<th scope="col">一级分类名称</th>
+								<th scope="col">二级分类名称</th>
+								<th scope="col">三级分类名称</th>
+								<th scope="col" >品牌名称</th>
+								<th scope="col">货号</th>
+								<th scope="col">状态</th>
+								<th scope="col">操作</th>
+							</tr>
+						</thead>
+						<tbody id="tbody">
+							<tr th:each="obj,stat:${pager.datas}">
+								<td th:text="${stat.index+1}"></td>
+								<!-- <td th:text="${obj.id}"></td> -->
+								<td th:text="${obj.goodsname}"></td>
+								<td th:text="${obj.first_classname}"></td>
+								<td th:text="${obj.second_classname}"></td>
+								<td th:text="${obj.thrid_classname}"></td>
+								<td th:text="${obj.brandname}"></td>
+								<td th:text="${obj.goodscode}"></td>
+								<td th:text="${obj.state==1?'上架' : '下架'}"></td>
+								<td>
+					           	<button type="button" th:onclick="ajaxModify(this)" th:submit_url="@{/admin/good/ajaxModify/}+${obj.id}"  th:hr="@{/admin/good/}+${obj.id}" class="btn btn-success">编辑基本信息</button>
+					           	<button type="button" th:onclick="ajaxModify(this)" th:submit_url="@{/admin/good/ajaxModify/}+${obj.id}"  th:hr="@{/admin/good/good_Spec/}+${obj.id}"   class="btn btn-success">编辑规格</button>
+					            <button type="button" th:onclick="ajaxModify(this)" th:submit_url="@{/admin/good/ajaxModify/}+${obj.id}"  th:hr="@{/admin/good/image/}+${obj.id}"  class="btn btn-success"  >编辑附图</button> 
+								<button type="button" th:onclick="changeState(this)" th:short_url="@{/admin/good}" th:if="${obj.state==2 }" th:hr="@{/admin/good/state/}+${obj.id}"   class="btn btn-success waves-effect waves-light m-1">上架</button>
+								<button type="button" th:onclick="changeState(this)" th:short_url="@{/admin/good}" th:if="${obj.state==1 }" th:hr="@{/admin/good/state/}+${obj.id}"   class="btn btn-success waves-effect waves-light m-1">下架</button>
+								<button type="button" th:onclick="r(this)" th:short_url="@{/admin/good}"  th:submit_url="@{/admin/good/}+${obj.id}" class="btn  btn-primary">删除</button>
+								</td>   
+							</tr>
+							</tbody>
+							<tfoot id="tfoot">
+							<tr>
+								<th scope="row" colspan="13">
+								<input type="hidden" id="page" th:value="${pager.page}">
+								<span class="current">[[${pager.size}]] Records</span> &nbsp;&nbsp;&nbsp;&nbsp; 
+								<span  class="current" >The [[${pager.page }]] Page</span> &nbsp;&nbsp;&nbsp;&nbsp; 
+								<span class="current">[[${pager.pages }]] Pages</span> &nbsp;&nbsp;&nbsp;&nbsp;
+									<button type="button" id="submit_first"
+										th:submit_url="@{/admin/goods/}+${pager.first}"
+										class="btn btn-outline-danger btn-round waves-effect waves-light m-1">First</button>
+									<button type="button" id="submit_pre"
+										th:submit_url="@{/admin/goods/}+${pager.pre}"
+										class="btn btn-outline-success btn-round waves-effect waves-light m-1">Previous</button>
+									<button type="button" id="submit_next"
+										th:submit_url="@{/admin/goods/}+${pager.next}"
+										class="btn btn-outline-info btn-round waves-effect waves-light m-1">Next</button>
+									<button type="button" id="submit_last"
+										th:submit_url="@{/admin/goods/}+${pager.last}"
+										class="btn btn-outline-warning btn-round waves-effect waves-light m-1">Last page</button>
+								</th>
+							</tr>
+							</tfoot>
+						
+					</table>
+				</form>
+            </div>
+		    <!--End Row-->
+		    
+    </div><!--container-fluid-->  
+ </div><!--End content-wrapper-->
+
+<a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
+
+<div th:replace="/admin/share/common::footer"></div>
+
+</div>
+<!-- 0end wrapper-->
+
+<div th:replace="/admin/share/common::js"></div>
+	<script type="text/javascript"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/jquery-1.8.3.js}"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/button_operateThrClass.js}"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/button_operateGoods.js}"></script>
+	<script type="text/javascript" th:src="@{/admin/assets/js/split.js}"></script>	
+	
+</body>
+</html>
+
+
